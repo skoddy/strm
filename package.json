@@ -1,15 +1,16 @@
 {
-  "name": "starter",
+  "name": "strm-starter",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod",
+    "build": "ng build",
     "test": "npm run lint && ng test --single-run",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "watch": "ng test --browsers ChromeHeadless --reporters spec --sourcemaps=false"
+    "watch": "ng test --browsers ChromeHeadless --reporters spec --sourcemaps=false",
+    "build:prod": "ng build --target production --build-optimizer --vendor-chunk --common-chunk"
   },
   "private": true,
   "dependencies": {

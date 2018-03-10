@@ -5,14 +5,14 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 import { DatabaseService } from './database/database.service';
 import { AuthService } from './auth/auth.service';
-
+import { AuthGuard } from './auth/auth.guard';
 @NgModule({
   imports: [
     AngularFireAuthModule,
     AngularFirestoreModule,
   ],
   declarations: [],
-  providers: [AuthService, DatabaseService]
+  providers: [AuthService, AuthGuard, DatabaseService]
 })
 export class CoreModule {
   constructor(
