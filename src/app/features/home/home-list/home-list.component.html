@@ -1,0 +1,34 @@
+<div>
+  <button mat-button (click)="addone()">add</button>
+  <mat-form-field>
+      <mat-select placeholder="Filter" (selectionChange)="filterByCat($event)"  [value]="selectedCat">
+        <mat-option>Alle</mat-option>
+        <mat-option *ngFor="let cat of cats" [value]="cat.value">{{cat.viewValue}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+<div *ngIf="loading | async">
+  <mat-progress-bar class="loader" mode="indeterminate"></mat-progress-bar>
+</div>
+<div (window:scroll)="myScrollHandler($event)" *ngIf="data | async; let posts;">
+  <div class="home-container" [@slidein]="docs">
+    <div *ngFor="let post of posts">
+      <a routerLink="read">
+        <mat-card class="example-card" (mouseenter)="onHovering($event)" (mouseleave)="onUnovering($event)">
+          <mat-card-header>
+            <div mat-card-avatar class="header-image" [ngStyle]="{'background-image': 'url(' + post.photoURL + ')'}"></div>
+            <mat-card-title>{{post.displayName}}</mat-card-title>
+            <mat-card-subtitle>[{{post.cat}}] - {{post.createdAt | date : 'd. LLLL yyyy, H:mm':'':'de'}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+              {{post.content | slice:0:150}}...
+            </p>
+          </mat-card-content>
+
+        </mat-card>
+      </a>
+    </div>
+
+  </div>
+  <button (click)="more()" mat-button>more</button>
+</div>

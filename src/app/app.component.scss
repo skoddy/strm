@@ -13,8 +13,9 @@ mat-sidenav-container {
     position: fixed;
     left: -16px;
     right: 0;
-    padding: 0 32px;
+    padding-left: 32px;
     height: 56px;
+    z-index: 10;
     .title{
       padding: 0 32px;
     }
@@ -24,7 +25,7 @@ mat-sidenav-container {
     height: 100%;
   }
   .sidenav-content {
-    padding: 32px;
+    margin-top: 56px;
   }
   .mat-drawer-content {
     overflow-y: scroll;

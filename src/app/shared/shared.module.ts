@@ -79,7 +79,7 @@ import {
   exports: [
     CommonModule,
     FormsModule,
-
+    MatProgressBarModule,
     MatButtonModule,
     MatMenuModule,
     MatTabsModule,

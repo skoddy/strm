@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +9,11 @@ import { Component, ViewEncapsulation } from '@angular/core';
 export class AppComponent {
   title = 'app';
   links = [
-    {icon: 'home', name: 'Home', aria: 'Home'},
-    {icon: 'home', name: 'Posts', aria: 'Posts'}
+    { icon: 'home', name: 'Home', aria: 'Home', url: '/' },
+    { icon: 'home', name: 'Posts', aria: 'Posts', url: '/asd' }
   ];
   constructor() {
 
   }
+
 }
