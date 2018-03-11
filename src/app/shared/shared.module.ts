@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {CdkTableModule} from '@angular/cdk/table';
+import { CdkTableModule } from '@angular/cdk/table';
+import { PortalModule } from '@angular/cdk/portal';
+import {OverlayModule} from '@angular/cdk/overlay';
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -41,7 +43,8 @@ import {
   imports: [
     CommonModule,
     FormsModule,
-
+    OverlayModule,
+    PortalModule,
     CdkTableModule,
     MatAutocompleteModule,
     MatButtonModule,
@@ -79,6 +82,8 @@ import {
   exports: [
     CommonModule,
     FormsModule,
+    OverlayModule,
+    PortalModule,
     MatProgressBarModule,
     MatButtonModule,
     MatMenuModule,

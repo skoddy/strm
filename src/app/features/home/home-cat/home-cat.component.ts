@@ -1,4 +1,6 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, Input, OnChanges } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import {
   animate,
   query,
@@ -9,15 +11,14 @@ import {
   keyframes
 } from '@angular/animations';
 import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs/Observable';
 import { interval } from 'rxjs/observable/interval';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { AuthService, DatabaseService } from '@app/core';
 import * as faker from 'faker';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/combineLatest';
 import * as firebase from 'firebase/app';
+import { Route, ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
 export interface Post {
   uid: string;
   createdAt: string;
@@ -43,32 +44,29 @@ export interface QueryConfig {
   reverse: boolean;
   prepend: boolean;
   direction: string;
+  cat: string;
 }
+
 @Component({
-  selector: 'app-home-list',
-  templateUrl: './home-list.component.html',
-  styleUrls: ['./home-list.component.scss'],
+  selector: 'app-home-cat',
+  templateUrl: './home-cat.component.html',
+  styleUrls: ['./home-cat.component.scss'],
   animations: [
     trigger('slidein', [
       transition('*=>*', [
         query(':enter', style({ opacity: 0 }), { optional: true }),
         query(':enter', stagger('100ms', [
           animate('.4s ease-in-out', keyframes([
-            style({ opacity: 0, transform: 'translateY(-25%)', offset: 0 }),
-            style({ opacity: 1, transform: 'translateY(0)', offset: 1 }),
+            style({ opacity: 0, offset: 0 }),
+            style({ opacity: 1, offset: 1 }),
           ]))]), { optional: true })
         ,
-        query(':leave', stagger('300ms', [
-          animate('.6s ease-out', keyframes([
-            style({ opacity: 1, transform: 'translateY(0)', offset: 0 }),
-            style({ opacity: 0, transform: 'translateY(-25%)', offset: 1.0 }),
-          ]))]), { optional: true })
       ])
     ])
   ]
 })
-
-export class HomeListComponent implements OnInit {
+export class HomeCatComponent implements OnInit {
+  @Input() cat: string;
   selectedCat: string;
   mouseOverTimer: any;
   docs = 8;
@@ -85,28 +83,39 @@ export class HomeListComponent implements OnInit {
   data: Observable<any>;
   done: Observable<boolean> = this._done.asObservable();
   loading: Observable<boolean> = this._loading.asObservable();
-
-  selectedValue: string;
-  catLinks = [
-    { value: 'Programmierung', label: 'Programmierung', path: '/home/cat/1' },
-    { value: 'Netzwerke', label: 'Netzwerke', path: '/home/cat/2' },
-    { value: 'Prüfung', label: 'Prüfung', path: '/home/cat/3' },
-    { value: 'Sonstiges', label: 'Sonstiges', path: '/home/cat/4' }
-  ];
-
   constructor(private afs: AngularFirestore,
     private db: DatabaseService,
-    private auth: AuthService) { }
+    private auth: AuthService,
+    private route: ActivatedRoute,
+    private router: Router) {
+
+
+  }
 
   ngOnInit() {
-    // this.init(`hackers`, 'createdAt');
-    // window.addEventListener('scroll', this.scroll, true); // third parameter
+    const cats = ['Programmierung', 'Netzwerke', 'Prüfung', 'Sonstiges'];
+    let id = +this.route.snapshot.paramMap.get('id');
+    this.init(`hackers`, 'createdAt', cats[+id - 1]);
+    this.router.events.filter(event => event instanceof NavigationEnd)
+      .subscribe((event: NavigationEnd) => {
+        id = +this.route.snapshot.paramMap.get('id');
+        this.init(`hackers`, 'createdAt', cats[+id - 1]);
+
+        console.log(id);
+      });
+    window.addEventListener('scroll', this.scroll, true); // third parameter
+
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     // this._data.unsubscribe();
-    // window.removeEventListener('scroll', this.scroll, true);
+    window.removeEventListener('scroll', this.scroll, true);
+    console.log('bye');
+  }
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngOnChanges() {
+    console.log('change');
   }
   scroll = (e): void => {
     const top = e.target.scrollTop;
@@ -121,20 +130,29 @@ export class HomeListComponent implements OnInit {
     }
   }
 
-  init(path: string, field: string, opts?: any) {
+  init(path: string, field: string, cat: string, opts?: any) {
+    console.log(this.data);
+    console.log(this._data);
+    if (this.data) {
+      this._data = new BehaviorSubject([]);
+      console.log('hi');
+      console.log(this._data);
+    }
     this.query = {
       path,
       field,
-      limitFirst: this.docs,
+      limitFirst: 8,
       limitMore: 4,
       reverse: true,
       prepend: false,
+      cat,
       ...opts
     };
 
     const first = this.afs.collection(this.query.path, ref => {
       return ref
-        .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
+        .where('cat', '==', this.query.cat)
+        .orderBy(this.query.field, 'desc')
         .limit(this.query.limitFirst);
     });
     this.mapAndUpdate(first);
@@ -151,10 +169,12 @@ export class HomeListComponent implements OnInit {
     const cursor = this.getCursor();
     const more = this.afs.collection(this.query.path, ref => {
       return ref
-        .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
+        .where('cat', '==', this.query.cat)
+        .orderBy(this.query.field, 'desc')
         .limit(this.query.limitMore)
         .startAfter(cursor);
     });
+    this.docs += this.query.limitMore;
     this.mapAndUpdate(more);
   }
 
@@ -175,7 +195,7 @@ export class HomeListComponent implements OnInit {
     // Map snapshot with doc ref (needed for cursor)
     return col.snapshotChanges().pipe(
       tap(docs => {
-        this.docs += 4;
+        this.docs++;
         console.log(this.docs);
       }),
       tap(arr => {
@@ -249,14 +269,19 @@ export class HomeListComponent implements OnInit {
     console.log(arr);
     return arr[Math.floor(Math.random() * arr.length)];
   }
-  sortByCat() {
+  sortByCat(cat: string) {
     // this._data.unsubscribe();
-    // this.init(`hackers`, 'cat');
-    this.data = this.data.map((users) => users.filter(user => {
-      console.log(user);
-      this.docs--;
-      return user.cat === 'Sonstiges';
-    }));
+    // this.init(`hackers`, 'cat');this._data.next(values);
+    this.data = this.data.map((users) => {
+      console.log(users);
+
+      users = users.filter(user => {
+        // console.log(user);
+        return user.cat === cat;
+      });
+      return users;
+    });
+    this.more();
   }
   onHovering(e) {
     const source = interval(500).take(1);
@@ -270,6 +295,4 @@ export class HomeListComponent implements OnInit {
     e.target.classList.remove('mat-elevation-z8');
     e.target.className = e.target.className.concat(' mat-elevation-z2 ');
   }
-
-
 }
