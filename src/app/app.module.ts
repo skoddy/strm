@@ -17,6 +17,7 @@ import { HomeListComponent } from './features/home/home-list/home-list.component
 import { NotFoundComponent } from './features/not-found/not-found.component';
 import { HomeDetailComponent } from './features/home/home-detail/home-detail.component';
 import { HomeCatComponent } from './features/home/home-cat/home-cat.component';
+import { PostsModule } from '@app/features/posts/posts.module';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { HomeCatComponent } from './features/home/home-cat/home-cat.component';
     AppRoutingModule,
     CoreModule,
     SharedModule,
+    PostsModule,
     AngularFireModule.initializeApp(firebaseConfig),
   ],
   providers: [],

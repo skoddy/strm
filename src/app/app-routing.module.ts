@@ -4,16 +4,17 @@ import { NotFoundComponent } from '@app/features/not-found/not-found.component';
 import { HomeListComponent } from '@app/features/home/home-list/home-list.component';
 import { HomeDetailComponent } from '@app/features/home/home-detail/home-detail.component';
 import { HomeCatComponent } from '@app/features/home/home-cat/home-cat.component';
+import { PostListComponent } from '@app/features/posts/post-list/post-list.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full'},
+  { path: '', redirectTo: 'posts', pathMatch: 'full' },
   {
-    path: 'home', component: HomeListComponent,
+    path: 'posts', component: PostListComponent,
     children: [
       {
         path: 'cat/:id',
         component: HomeCatComponent,
-      }
+      },
     ]
   },
   { path: 'read', component: HomeDetailComponent },
