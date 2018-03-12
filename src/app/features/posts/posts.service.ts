@@ -48,7 +48,7 @@ export interface QueryConfig {
 
 @Injectable()
 export class PostsService {
-  docs = 8;
+  docs = 2;
   datalength: number;
   feed$: Observable<Post[]>;
   content: string;
@@ -92,7 +92,7 @@ export class PostsService {
       path,
       field,
       limitFirst: this.docs,
-      limitMore: 4,
+      limitMore: 1,
       reverse: true,
       prepend: false,
       ...opts
@@ -141,7 +141,6 @@ export class PostsService {
     // Map snapshot with doc ref (needed for cursor)
     return col.snapshotChanges().pipe(
       tap(docs => {
-        this.docs += 4;
         console.log(this.docs);
       }),
       tap(arr => {
@@ -166,19 +165,6 @@ export class PostsService {
     ).take(1).subscribe();
   }
 
-  myScrollHandler(e) {
-    const top = e.target.documentElement.scrollTop;
-    const height = e.target.documentElement.scrollHeight;
-    const offset = e.target.documentElement.clientHeight;
-    console.log('bottom');
-    if (top > height - offset - 1) {
-      // this.more();
-      console.log('bottom');
-    }
-    if (top === 0) {
-      console.log('top');
-    }
-  }
   public createPost(category: string, content: string) {
     this.db.add<NewPost>(`users/${this.auth.uid}/posts`, {
       uid: this.auth.uid,
