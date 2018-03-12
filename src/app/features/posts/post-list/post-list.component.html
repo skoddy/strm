@@ -1,12 +1,12 @@
-<div *ngIf="loading | async">
+<div *ngIf="posts.loading | async">
   <mat-progress-bar class="loader" mode="indeterminate"></mat-progress-bar>
 </div>
 
 <div *ngIf="posts.data | async; let posts;">
-  <div class="home-container" [@slidein]="docs">
+  <div class="home-container"   [@slidein]="posts.datalength">
     <div *ngFor="let post of posts">
       <a routerLink="/read">
-        <mat-card class="example-card" (mouseenter)="onHovering($event)" (mouseleave)="onUnovering($event)">
+        <mat-card class="post-card" (mouseenter)="onHovering($event)" (mouseleave)="onUnovering($event)">
           <mat-card-header>
             <div mat-card-avatar class="header-image" [ngStyle]="{'background-image': 'url(' + post.photoURL + ')'}"></div>
             <mat-card-title>{{post.displayName}}</mat-card-title>
@@ -23,5 +23,7 @@
     </div>
 
   </div>
-  <button (click)="more()" mat-button>more</button>
 </div>
+<p *ngIf="posts.done | async"> Ende </p>
+<button (click)="posts.more()" mat-button>more</button>
+

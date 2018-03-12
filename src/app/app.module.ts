@@ -13,19 +13,14 @@ import { environment } from '../environments/environment';
 import { AngularFireModule } from 'angularfire2';
 export const firebaseConfig = environment.firebaseConfig;
 import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { HomeListComponent } from './features/home/home-list/home-list.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
-import { HomeDetailComponent } from './features/home/home-detail/home-detail.component';
-import { HomeCatComponent } from './features/home/home-cat/home-cat.component';
-import { PostsModule } from '@app/features/posts/posts.module';
+import { HomeDetailComponent } from '@app/features/home/home-detail/home-detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeListComponent,
     NotFoundComponent,
-    HomeDetailComponent,
-    HomeCatComponent
+    HomeDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +30,6 @@ import { PostsModule } from '@app/features/posts/posts.module';
     AppRoutingModule,
     CoreModule,
     SharedModule,
-    PostsModule,
     AngularFireModule.initializeApp(firebaseConfig),
   ],
   providers: [],

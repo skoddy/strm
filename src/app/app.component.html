@@ -1,5 +1,5 @@
-<mat-sidenav-container (scroll)="scrollHandler($event)" >
-  <mat-sidenav #start mode="side" opened="true" fixedInViewport="true" fixedTopGap="0" fixedBottomGap="0" class="mat-typography">
+<mat-sidenav-container>
+  <mat-sidenav #start mode="side" opened="false" fixedInViewport="true" fixedTopGap="0" fixedBottomGap="0" class="mat-typography">
     <mat-list role="list">
       <mat-list-item role="listitem">
         <button (click)="start.close('mouse')" mat-icon-button>
@@ -15,7 +15,7 @@
         <mat-icon>{{ link.icon }}</mat-icon> {{ link.name }} </a>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content >
+  <mat-sidenav-content>
     <mat-toolbar class="mat-elevation-z2">
       <button (click)="start.open('mouse')" mat-icon-button>
         <mat-icon aria-label="Menu Toggle">menu</mat-icon>
@@ -23,15 +23,16 @@
       <span class="title">STREAM</span>
       <span class="spacer"></span>
       <button mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item>Item 1</button>
-            <button mat-menu-item>Item 2</button>
-        </mat-menu>
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Item 1</button>
+        <button mat-menu-item>Item 2</button>
+      </mat-menu>
     </mat-toolbar>
-    <div class="sidenav-content" >
-      <router-outlet></router-outlet>
+    <div class="sidenav-content" [@routerTransition]="o.isActivated && o.activatedRoute.routeConfig.path">
+      <router-outlet #o="outlet"></router-outlet>
     </div>
+
   </mat-sidenav-content>
 </mat-sidenav-container>

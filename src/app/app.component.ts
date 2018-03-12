@@ -1,9 +1,11 @@
-import { Component, ViewEncapsulation} from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { routerTransition } from '@app/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  animations: [routerTransition],
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {

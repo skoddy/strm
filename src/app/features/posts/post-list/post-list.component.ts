@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { ANIMATE_ON_ROUTE_ENTER } from '@app/core';
+import { AngularFirestore, DocumentChangeAction, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { PostsService } from '@app/features/posts/posts.service';
 import { Observable } from '@firebase/util/dist/esm/src/subscribe';
 import { Post } from '../post-model';
+
 import {
   animate,
   query,
@@ -13,6 +15,8 @@ import {
   keyframes
 } from '@angular/animations';
 import { interval } from 'rxjs/observable/interval';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
@@ -26,25 +30,22 @@ import { interval } from 'rxjs/observable/interval';
             style({ opacity: 0, offset: 0 }),
             style({ opacity: 1, offset: 1 }),
           ]))]), { optional: true })
-        ,
-        query(':leave', stagger('300ms', [
-          animate('.6s ease-out', keyframes([
-            style({ opacity: 1, transform: 'translateY(0)', offset: 0 }),
-            style({ opacity: 0, transform: 'translateY(-25%)', offset: 1.0 }),
-          ]))]), { optional: true })
       ])
     ])
   ]
 })
 export class PostListComponent implements OnInit {
+  animateOnRouteEnter = ANIMATE_ON_ROUTE_ENTER;
   mouseOverTimer: any;
+  datalength = 20;
+  constructor(public posts: PostsService, public afs: AngularFirestore) {
 
-  constructor(
-    public posts: PostsService
-  ) { }
+  }
   ngOnInit() {
+    this.posts.docs = 8;
+    this.posts._data = new BehaviorSubject([]);
+    console.log(this.posts.docs);
     this.posts.init('hackers', 'createdAt');
-
     window.addEventListener('scroll', this.posts.scroll, true); // third parameter
   }
 
@@ -52,10 +53,10 @@ export class PostListComponent implements OnInit {
   ngOnDestroy() {
     window.removeEventListener('scroll', this.posts.scroll, true);
   }
-
-
   more() {
     this.posts.more();
+    this.datalength++;
+    console.log(this.posts.docs);
   }
   onHovering(e) {
     const source = interval(500).take(1);
