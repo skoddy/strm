@@ -9,7 +9,7 @@ import { AuthGuard } from './auth/auth.guard';
 @NgModule({
   imports: [
     AngularFireAuthModule,
-    AngularFirestoreModule.enablePersistence(),
+    AngularFirestoreModule,
   ],
   declarations: [],
   providers: [AuthService, AuthGuard, DatabaseService]

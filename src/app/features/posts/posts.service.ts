@@ -3,7 +3,7 @@ import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 import { interval } from 'rxjs/observable/interval';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { AngularFirestoreCollection, AngularFirestore, DocumentChangeAction } from 'angularfire2/firestore';
+import { AngularFirestoreCollection, AngularFirestore, DocumentChangeAction, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { AuthService, DatabaseService } from '@app/core';
 import * as faker from 'faker';
 import 'rxjs/add/operator/switchMap';
@@ -68,6 +68,8 @@ export class PostsService {
   done: Observable<boolean> = this._done.asObservable();
   loading: Observable<boolean> = this._loading.asObservable();
 
+  private postDoc: AngularFirestoreDocument<Post>;
+  post: Observable<Post>;
   selectedValue: string;
   catLinks = [
     { value: 'Programmierung', label: 'Programmierung', path: '/home/cat/1' },
@@ -86,51 +88,13 @@ export class PostsService {
     const height = e.target.scrollHeight;
     const offset = e.target.clientHeight;
     if (top > height - offset - 50) {
-      console.log('bottom');
-      console.log(this.docs);
       this.more();
     }
     if (top === 0) {
 
     }
   }
-  initFirst() {
-    this._firstQ = this.afs.collection<Post>('hackers',
-      ref => ref
-        .orderBy('createdAt', 'desc')
-        .limit(8));
-    this.firstQ = this._firstQ.snapshotChanges().map(actions => {
-      return actions.map(a => {
-        const docs = a.payload.doc;
-        const data = a.payload.doc.data() as Post;
-        const id = a.payload.doc.id;
-        return { id, ...data, docs };
-      });
-    });
-    this.firstQ.subscribe(data => {
-      this.lastEntry = data[data.length - 1].createdAt;
-      this.datalength = data.length;
-    });
-  }
-  loadMore() {
-    this._moreQ = this.afs.collection<Post>('hackers',
-      ref => ref
-        .orderBy('createdAt', 'desc')
-        .startAfter(this.lastEntry)
-        .limit(8));
-    this.moreQ = this._moreQ.snapshotChanges().map(actions => {
-      return actions.map(a => {
-        const docs = a.payload.doc;
-        const data = a.payload.doc.data() as Post;
-        const id = a.payload.doc.id;
-        return { id, ...data, docs };
-      });
-    });
-    this.moreQ.subscribe(data => {
-      this.lastEntry = data[data.length - 1].createdAt;
-      this.datalength = data.length;
-    });
-  }
+
   init(path: string, field: string, opts?: any) {
     this.query = {
       path,
@@ -202,9 +166,23 @@ export class PostsService {
         }
         this._loading.next(false);
       }),
-    ).take(1).subscribe();
+    ).take(1).subscribe(
+      x => {
+        console.log('Observer got a next value: ' + x);
+        if (!x) {
+          console.log('No next value!');
+          return {unsubscribe() {}};
+        }
+    },
+      err => console.error('Observer got an error: ' + err),
+      () => console.log('Observer got a complete notification')
+    );
   }
 
+  getPost(id: string) {
+    this.postDoc = this.afs.doc<Post>(`hackers/${id}`);
+    return this.post = this.postDoc.valueChanges();
+  }
 
   addone() {
     const categories = [
@@ -218,7 +196,7 @@ export class PostsService {
       displayName: faker.name.findName(),
       age: faker.random.number({ min: 18, max: 99 }),
       email: faker.internet.email(),
-      content: faker.lorem.sentences(4),
+      content: faker.lorem.sentences(25),
       uid: faker.random.alphaNumeric(16),
       photoURL: faker.internet.avatar(),
       cat: this.getRandomItem(categories),
@@ -230,15 +208,6 @@ export class PostsService {
   getRandomItem(arr) {
     console.log(arr);
     return arr[Math.floor(Math.random() * arr.length)];
-  }
-  sortByCat() {
-    // this._data.unsubscribe();
-    // this.init(`hackers`, 'cat');
-    this.data = this.data.map((users) => users.filter(user => {
-      console.log(user);
-      this.docs--;
-      return user.cat === 'Sonstiges';
-    }));
   }
 
 }

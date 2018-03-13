@@ -42,9 +42,7 @@ export class PostListComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.posts.docs = 8;
-    this.posts._data = new BehaviorSubject([]);
-    console.log(this.posts.docs);
+
     this.posts.init('hackers', 'createdAt');
     window.addEventListener('scroll', this.posts.scroll, true); // third parameter
   }
@@ -55,8 +53,7 @@ export class PostListComponent implements OnInit {
   }
   more() {
     this.posts.more();
-    this.datalength++;
-    console.log(this.posts.docs);
+
   }
   onHovering(e) {
     const source = interval(500).take(1);

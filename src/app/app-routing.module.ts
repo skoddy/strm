@@ -5,11 +5,11 @@ import { HomeDetailComponent } from '@app/features/home/home-detail/home-detail.
 
 const routes: Routes = [
   { path: '', redirectTo: 'posts', pathMatch: 'full' },
+  { path: 'home', component: HomeDetailComponent },
   {
     path: 'posts',
     loadChildren: 'app/features/posts/posts.module#PostsModule'
   },
-  { path: 'read', component: HomeDetailComponent },
   { path: '**', component: NotFoundComponent }
 ];
 
