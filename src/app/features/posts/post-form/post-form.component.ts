@@ -69,9 +69,9 @@ export class PostFormComponent implements OnInit {
     const postData: Post = {
       createdAt: new Date(),
       category: this.category,
-      title: this.title,
-      subheader: this.subheader,
-      content: this.content,
+      title: this.strip_html_tags(this.title),
+      subheader: this.strip_html_tags(this.subheader),
+      content: this.strip_html_tags(this.content),
       author: authorData
     };
 
@@ -82,6 +82,15 @@ export class PostFormComponent implements OnInit {
 
   add(data, id) {
     return this.afs.collection('posts').doc(id).set(data);
+  }
+
+  strip_html_tags(str) {
+    if ((str === null) || (str === '')) {
+      return false;
+    } else {
+      str = str.toString();
+    }
+    return str.replace(/<[^>]*>/g, '');
   }
 
   getRandomItem(arr) {

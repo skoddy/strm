@@ -11,10 +11,10 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-        <input [(ngModel)]="title" matInput placeholder="Überschrift">
+        <input [(ngModel)]="title" matInput placeholder="Titel">
       </mat-form-field>
       <mat-form-field>
-          <textarea [(ngModel)]="subheader" matInput placeholder="Subheader" matTextareaAutosize matAutosizeMinRows="5" matAutosizeMaxRows="8"></textarea>
+          <textarea [(ngModel)]="subheader" matInput placeholder="Teaser" matTextareaAutosize matAutosizeMinRows="5" matAutosizeMaxRows="8"></textarea>
         </mat-form-field>
     <mat-form-field class="stream-list-create-textfield">
         <textarea #msg [(ngModel)]="content" matInput placeholder="Was gibt's neues?" matTextareaAutosize matAutosizeMinRows="20"
