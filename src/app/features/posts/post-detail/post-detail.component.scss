@@ -3,19 +3,19 @@ mat-card {
   min-width: 300px;
   display: inline-block;
   margin: 16px;
- div.mat-card-header-text {
+  div.mat-card-header-text {
     margin: 0 0 0 0 !important;
   }
   .header-image {
       background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
       background-size: cover;
-    }
-    mat-card-content {
-      padding: 8px;
-      text-align: justify;
+  }
+  mat-card-content {
+    padding: 8px;
+    text-align: justify;
+    white-space: pre-line;
       .mat-subheading-1 {
-font-style: italic;
+        font-style: italic;
       }
-      // white-space: pre-line;
   }
 }

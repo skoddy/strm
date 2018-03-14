@@ -14,13 +14,11 @@ import { AngularFireModule } from 'angularfire2';
 export const firebaseConfig = environment.firebaseConfig;
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { NotFoundComponent } from './features/not-found/not-found.component';
-import { HomeDetailComponent } from '@app/features/home/home-detail/home-detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NotFoundComponent,
-    HomeDetailComponent
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,

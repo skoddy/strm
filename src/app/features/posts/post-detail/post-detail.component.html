@@ -4,7 +4,7 @@
       <mat-card-title>
         <span class="mat-display-1">{{post.title}}</span>
       </mat-card-title>
-      <mat-card-subtitle>von {{post.displayName}}</mat-card-subtitle>
+      <mat-card-subtitle>{{post.createdAt | date : 'd. LLLL yyyy, H:mm':'':'de'}}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
         <div class="mat-subheading-1">{{post.subheader}}</div>

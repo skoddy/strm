@@ -8,19 +8,17 @@
       <a routerLink="read/{{post.id}}">
         <mat-card class="post-card" (mouseenter)="onHovering($event)" (mouseleave)="onUnovering($event)">
           <mat-card-header>
-            <div mat-card-avatar class="header-image" [ngStyle]="{'background-image': 'url(' + post.photoURL + ')'}"></div>
-            <mat-card-title>{{post.displayName}}</mat-card-title>
+            <div mat-card-avatar class="header-image" [ngStyle]="{'background-image': 'url(' + post.author.photoURL + ')'}"></div>
+            <mat-card-title>{{post.author.displayName}}</mat-card-title>
             <mat-card-subtitle>[{{post.category}}] - {{post.createdAt | date : 'd. LLLL yyyy, H:mm':'':'de'}}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>{{post.content | slice:0:150}}...</mat-card-content>
         </mat-card>
       </a>
     </div>
-
   </div>
 </div>
 <p *ngIf="posts.done | async"> Ende </p>
 <button (click)="posts.more()" mat-button>more</button>
 <button routerLink="new" mat-button>new</button>
-<button (click)="posts.addone()" mat-button>add</button>
 

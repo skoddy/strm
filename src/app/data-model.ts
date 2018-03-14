@@ -1,14 +1,17 @@
 export class Post {
-  constructor(
-    public createdAt: Date,
-    public category: string,
-    public title: string,
-    public subheader: string,
-    public content: string,
-    public uid: string,
-    public displayName: string,
-    public photoURL: string
 
-  ) { }
-
+  createdAt: Date;
+  category: string;
+  title: string;
+  subheader: string;
+  content: string;
+  author: Author;
 }
+
+export class Author {
+  uid: string;
+  displayName: string;
+  photoURL: string;
+}
+
+

@@ -1,22 +1,13 @@
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
-import { interval } from 'rxjs/observable/interval';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { AngularFirestoreCollection, AngularFirestore, DocumentChangeAction, AngularFirestoreDocument } from 'angularfire2/firestore';
-import { AuthService, DatabaseService } from '@app/core';
-import * as faker from 'faker';
+import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
+import { AuthService } from '@app/core';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/combineLatest';
 import * as firebase from 'firebase/app';
 import { Post } from '../../data-model';
-export interface NewPost {
-  uid: string;
-  displayName: string;
-  photoURL: string;
-  content: string;
-  category: string;
-}
+
 export interface QueryConfig {
   path: string;
   field: string;
@@ -27,54 +18,31 @@ export interface QueryConfig {
   direction: string;
 }
 
-
 @Injectable()
-export class PostsService {
-  private _firstQ: AngularFirestoreCollection<Post>;
-  firstQ: Observable<Post[]>;
-  private _moreQ: AngularFirestoreCollection<Post>;
-  moreQ: Observable<Post[]>;
-
-
-  lastEntry: string;
-  docs: number;
-  datalength: number;
+export class PostsListService {
   content: string;
   category: string;
   query: QueryConfig;
   // Source data
   private _done = new BehaviorSubject(false);
   private _loading = new BehaviorSubject(false);
-  _data = new BehaviorSubject([]);
+  // public for reset in component
+  public _data = new BehaviorSubject([]);
   // Observable data
-  data: Observable<any>;
-  done: Observable<boolean> = this._done.asObservable();
-  loading: Observable<boolean> = this._loading.asObservable();
+  public data: Observable<any>;
+  public done: Observable<boolean> = this._done.asObservable();
+  public loading: Observable<boolean> = this._loading.asObservable();
 
-  private postDoc: AngularFirestoreDocument<Post>;
-  post: Observable<Post>;
-  selectedValue: string;
-  catLinks = [
-    { value: 'Programmierung', label: 'Programmierung', path: '/home/cat/1' },
-    { value: 'Netzwerke', label: 'Netzwerke', path: '/home/cat/2' },
-    { value: 'Prüfung', label: 'Prüfung', path: '/home/cat/3' },
-    { value: 'Sonstiges', label: 'Sonstiges', path: '/home/cat/4' }
-  ];
   constructor(
     private afs: AngularFirestore,
-    private db: DatabaseService,
-    private auth: AuthService) {
+    private auth: AuthService) {}
 
-  }
   scroll = (e): void => {
     const top = e.target.scrollTop;
     const height = e.target.scrollHeight;
     const offset = e.target.clientHeight;
-    if (top > height - offset - 50) {
+    if (top > height - offset - 1) {
       this.more();
-    }
-    if (top === 0) {
-
     }
   }
 
@@ -82,14 +50,14 @@ export class PostsService {
     this.query = {
       path,
       field,
-      limitFirst: 8,
-      limitMore: 4,
+      limitFirst: 9,
+      limitMore: 2,
       reverse: true,
       prepend: false,
       ...opts
     };
 
-    const first = this.afs.collection(this.query.path, ref => {
+    const first = this.afs.collection<Post>(this.query.path, ref => {
       return ref
         .orderBy(this.query.field, 'desc')
         .limit(this.query.limitFirst);
@@ -119,7 +87,6 @@ export class PostsService {
   private getCursor() {
     const current = this._data.value;
     if (current.length) {
-      this.docs += current.length;
       return current[current.length - 1].doc;
     }
     return null;
@@ -158,42 +125,8 @@ export class PostsService {
       },
       err => console.error('Observer got an error: ' + err),
       () => console.log('Observer got a complete notification')
-      );
-  }
-
-  getPost(id: string) {
-    this.postDoc = this.afs.doc<Post>(`hackers/${id}`);
-    return this.post = this.postDoc.valueChanges();
-  }
-
-  addone() {
-    const categories = [
-      'Programmierung',
-      'Netzwerke',
-      'Prüfung',
-      'Sonstiges'
-    ];
-
-    const hacker = {
-      displayName: faker.name.findName(),
-      age: faker.random.number({ min: 18, max: 99 }),
-      email: faker.internet.email(),
-      content: faker.lorem.sentences(25),
-      subheader: faker.lorem.sentences(5),
-      uid: faker.random.alphaNumeric(16),
-      photoURL: faker.internet.avatar(),
-      category: this.getRandomItem(categories),
-      createdAt: new Date()
-    };
-    this.afs.collection('hackers').doc(hacker.uid).set(hacker);
-  }
-  add(data) {
-    this.afs.collection('hackers').add(Object.assign({}, data));
-
-  }
-  getRandomItem(arr) {
-    console.log(arr);
-    return arr[Math.floor(Math.random() * arr.length)];
+    );
   }
 
 }
+
