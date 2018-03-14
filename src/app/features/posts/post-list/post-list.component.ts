@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ANIMATE_ON_ROUTE_ENTER } from '@app/core';
 import { AngularFirestore, DocumentChangeAction, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { PostsService } from '@app/features/posts/posts.service';
-import { Observable } from '@firebase/util/dist/esm/src/subscribe';
-import { Post } from '../post-model';
+
 
 import {
   animate,
