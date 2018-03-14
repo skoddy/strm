@@ -99,6 +99,7 @@ import {
     MatToolbarModule,
     MatIconModule,
     MatTooltipModule,
+    MatDialogModule
 
   ],
   declarations: []

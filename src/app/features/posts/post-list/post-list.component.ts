@@ -16,44 +16,52 @@ import {
 } from '@angular/animations';
 import { interval } from 'rxjs/observable/interval';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { PostDialogComponent } from '@app/features/posts/post-dialog/post-dialog.component';
+
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss'],
-  animations: [
-    trigger('slidein', [
-      transition('*=>*', [
-        query(':enter', style({ opacity: 0 }), { optional: true }),
-        query(':enter', stagger('100ms', [
-          animate('.4s ease-in-out', keyframes([
-            style({ opacity: 0, offset: 0 }),
-            style({ opacity: 1, offset: 1 }),
-          ]))]), { optional: true })
-      ])
-    ])
-  ]
 })
+
 export class PostListComponent implements OnInit {
   animateOnRouteEnter = ANIMATE_ON_ROUTE_ENTER;
   mouseOverTimer: any;
   datalength = 20;
-  constructor(public posts: PostsService, public afs: AngularFirestore) {
-
+  animal: string;
+  name: string;
+  constructor(public posts: PostsService, public afs: AngularFirestore, public dialog: MatDialog) {
+    this.posts.init('hackers', 'createdAt');
   }
   ngOnInit() {
 
-    this.posts.init('hackers', 'createdAt');
     window.addEventListener('scroll', this.posts.scroll, true); // third parameter
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     window.removeEventListener('scroll', this.posts.scroll, true);
+    this.posts._data = new BehaviorSubject([]);
+    console.log('destroyed');
   }
   more() {
     this.posts.more();
 
+  }
+  openDialog(): void {
+    const dialogRef = this.dialog.open(PostDialogComponent, {
+      width: '500px',
+      height: '600px',
+      data: { name: this.name, animal: this.animal }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.animal = result;
+    });
   }
   onHovering(e) {
     const source = interval(500).take(1);

@@ -9,16 +9,7 @@ import * as faker from 'faker';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/combineLatest';
 import * as firebase from 'firebase/app';
-export interface Post {
-  uid: string;
-  createdAt: string;
-  content: string;
-  category: string;
-  author: {
-    displayName: string;
-    photoURL: string;
-  };
-}
+import { Post } from '../../data-model';
 export interface NewPost {
   uid: string;
   displayName: string;
@@ -35,15 +26,7 @@ export interface QueryConfig {
   prepend: boolean;
   direction: string;
 }
-export interface QueryConfig {
-  path: string;
-  field: string;
-  limitFirst: number;
-  limitMore: number;
-  reverse: boolean;
-  prepend: boolean;
-  direction: string;
-}
+
 
 @Injectable()
 export class PostsService {
@@ -144,7 +127,7 @@ export class PostsService {
 
   // Maps the snapshot to usable format the updates source
   private mapAndUpdate(col?: AngularFirestoreCollection<any>) {
-    if (this._done.value || this._loading.value) { return; }
+    // if (this._done.value || this._loading.value) { return; }
     // loading
     this._loading.next(true);
     // Map snapshot with doc ref (needed for cursor)
@@ -158,7 +141,10 @@ export class PostsService {
         });
 
         // update source with new values, done loading
-        this._data.next(values);
+        console.log(values);
+        if (values.length) {
+          this._data.next(values);
+        }
         this._loading.next(false);
         // no more values, mark done
         if (!values.length) {
@@ -168,15 +154,11 @@ export class PostsService {
       }),
     ).take(1).subscribe(
       x => {
-        console.log('Observer got a next value: ' + x);
-        if (!x) {
-          console.log('No next value!');
-          return {unsubscribe() {}};
-        }
-    },
+        console.log('Observer got a next value: ' + x.length);
+      },
       err => console.error('Observer got an error: ' + err),
       () => console.log('Observer got a complete notification')
-    );
+      );
   }
 
   getPost(id: string) {
@@ -197,14 +179,18 @@ export class PostsService {
       age: faker.random.number({ min: 18, max: 99 }),
       email: faker.internet.email(),
       content: faker.lorem.sentences(25),
+      subheader: faker.lorem.sentences(5),
       uid: faker.random.alphaNumeric(16),
       photoURL: faker.internet.avatar(),
-      cat: this.getRandomItem(categories),
+      category: this.getRandomItem(categories),
       createdAt: new Date()
     };
     this.afs.collection('hackers').doc(hacker.uid).set(hacker);
   }
+  add(data) {
+    this.afs.collection('hackers').add(Object.assign({}, data));
 
+  }
   getRandomItem(arr) {
     console.log(arr);
     return arr[Math.floor(Math.random() * arr.length)];

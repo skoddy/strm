@@ -2,7 +2,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 import { PostsService } from '@app/features/posts/posts.service';
 import { Observable } from 'rxjs/Observable';
-import { Post } from '@app/features/posts/post-model';
+import { Post } from '../../../data-model';
 
 
 @Component({
