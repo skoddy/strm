@@ -1,4 +1,4 @@
-<div *ngIf="auth.user$ | async">
+<div >
   <mat-toolbar class="main-header">
     <button (click)="start.open('mouse')" mat-icon-button>
       <mat-icon aria-label="Menu Toggle">menu</mat-icon>
@@ -8,13 +8,15 @@
     <button mat-icon-button (click)="end.toggle()">
       <mat-icon aria-label="Right sidenav toggle">favorite</mat-icon>
     </button>
-    <button mat-icon-button (click)="login()">
-      <mat-icon aria-label="Right sidenav toggle">favorite</mat-icon>
-    </button>
-    <a (click)="settings()">
+   
+    <a (click)="settings()" *ngIf="auth.user$ | async else loginbutton">
       <img class="account-button" [src]="auth.photoURL" height="30" width="30" align="middle">
     </a>
-
+<ng-template #loginbutton>
+    <button mat-button (click)="login()">
+        <mat-icon aria-label="Right sidenav toggle">move_to_inbox</mat-icon> Anmelden
+      </button>
+</ng-template>
   </mat-toolbar>
   <mat-sidenav-container id="content" class="main-container">
     <mat-sidenav position="start" #start mode="side" opened="false" class="left-sidenav" fixedInViewport="true" fixedTopGap="0"

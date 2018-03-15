@@ -27,12 +27,12 @@ export class AppComponent {
   login() {
     this.auth.googleLogin();
   }
+
   removePortal = (): void => {
     if (this.isOpen === true) {
       this.portal.detach();
       this.isOpen = false;
     }
-
   }
   settings() {
     if (this.isOpen === false) {

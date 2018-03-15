@@ -26,5 +26,7 @@ export class SettingsPortalComponent implements OnInit {
   ngOnInit() {
     this.auth.user$.subscribe(user => this.user = user);
   }
-
+  logout() {
+    this.auth.signOut();
+  }
 }

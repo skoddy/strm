@@ -36,7 +36,6 @@ export class AuthService {
           console.log(this.userDetails);
         } else {
           this.userDetails = null;
-          this.router.navigate(['/login']);
         }
       }
     );

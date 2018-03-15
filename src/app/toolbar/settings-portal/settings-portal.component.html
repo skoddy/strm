@@ -6,6 +6,14 @@
   </mat-card-header>
 
   <mat-nav-list>
-    <a mat-list-item href="#" *ngFor="let link of links"><mat-icon matListIcon>{{ link.icon }}</mat-icon> {{ link.name }} </a>
+    <a mat-list-item href="#">
+      <mat-icon matListIcon>account_box</mat-icon> Konto </a>
+    <a mat-list-item href="#">
+      <mat-icon matListIcon>settings</mat-icon> Einstellungen </a>
+    <a mat-list-item>
+      <mat-icon matListIcon>brightness_6</mat-icon> Dunkelmodus </a>
+      <mat-divider></mat-divider>
+    <a mat-list-item  (click)="logout()">
+      <mat-icon matListIcon>exit_to_app</mat-icon> Abmelden </a>
   </mat-nav-list>
 </div>
