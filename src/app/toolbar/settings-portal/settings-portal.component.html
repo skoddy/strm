@@ -1,0 +1,11 @@
+<div class="settingsportal mat-elevation-z8" *ngIf="auth.user$ | async">
+  <mat-card-header class="mat-typography">
+    <div mat-card-avatar class="header-image" [ngStyle]="{'background-image': 'url(' + user.photoURL + ')'}"></div>
+    <mat-card-title>{{user.displayName}}</mat-card-title>
+    <mat-card-subtitle>{{user.email}}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-nav-list>
+    <a mat-list-item href="#" *ngFor="let link of links"><mat-icon matListIcon>{{ link.icon }}</mat-icon> {{ link.name }} </a>
+  </mat-nav-list>
+</div>

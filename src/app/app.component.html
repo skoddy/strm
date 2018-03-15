@@ -1,5 +1,5 @@
-<div>
-  <mat-toolbar class="example-header">
+<div *ngIf="auth.user$ | async">
+  <mat-toolbar class="main-header">
     <button (click)="start.open('mouse')" mat-icon-button>
       <mat-icon aria-label="Menu Toggle">menu</mat-icon>
     </button>
@@ -9,21 +9,15 @@
       <mat-icon aria-label="Right sidenav toggle">favorite</mat-icon>
     </button>
     <button mat-icon-button (click)="login()">
-        <mat-icon aria-label="Right sidenav toggle">favorite</mat-icon>
-      </button>
-      <button mat-icon-button (click)="settings()">
-          <mat-icon aria-label="Right sidenav toggle">person</mat-icon>
-        </button>
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-      <mat-icon>more_vert</mat-icon>
+      <mat-icon aria-label="Right sidenav toggle">favorite</mat-icon>
     </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item>Item 1</button>
-      <button mat-menu-item>Item 2</button>
-    </mat-menu>
+    <a (click)="settings()">
+      <img class="account-button" [src]="auth.photoURL" height="30" width="30" align="middle">
+    </a>
+
   </mat-toolbar>
-  <mat-sidenav-container class="example-container">
-    <mat-sidenav position="start" #start mode="side" opened="true" class="left-sidenav" fixedInViewport="true" fixedTopGap="0"
+  <mat-sidenav-container id="content" class="main-container">
+    <mat-sidenav position="start" #start mode="side" opened="false" class="left-sidenav" fixedInViewport="true" fixedTopGap="0"
       fixedBottomGap="0">
       <mat-list role="list">
         <mat-list-item role="listitem">
@@ -39,7 +33,7 @@
           <mat-icon>{{ link.icon }}</mat-icon> {{ link.name }} </a>
       </mat-nav-list>
     </mat-sidenav>
-    <mat-sidenav #end position="end" mode="side" opened="true" class="right-sidenav" fixedInViewport="true" fixedTopGap="56"
+    <mat-sidenav #end position="end" mode="side" opened="false" class="right-sidenav" fixedInViewport="true" fixedTopGap="56"
       fixedBottomGap="0">
       <p>asdfasfd as fas </p>
     </mat-sidenav>
@@ -50,4 +44,4 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
-<ng-template [cdkPortalOutlet]="userSettingsPortal">sdfsdf</ng-template>
+<ng-template [cdkPortalOutlet]="portal"></ng-template>

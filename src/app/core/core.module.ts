@@ -14,7 +14,7 @@ import { AdminGuard } from './auth/admin.guard';
     AngularFirestoreModule,
   ],
   declarations: [],
-  providers: [AuthService, AuthGuard, DatabaseService, CanReadGuard, AdminGuard]
+  providers: [AuthService, AuthGuard, DatabaseService]
 })
 export class CoreModule {
   constructor(

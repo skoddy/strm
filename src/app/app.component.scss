@@ -1,4 +1,4 @@
-.example-container {
+.main-container {
   position: absolute;
   top: 56px;
   bottom: 0;
@@ -9,6 +9,7 @@
 .left-sidenav {
   width: 240px;
   border-right: 1px solid rgba(0,0,0,.14);
+
   .mat-icon {
     color: hsl(0, 0%, 53.3%);
   }
@@ -38,7 +39,7 @@
   z-index: 1!important;
   border-left: 1px solid rgba(0,0,0,.14);
 }
-.example-header {
+.main-header {
   position: fixed;
   height: 56px;
   top: 0;
@@ -46,6 +47,14 @@
   right: 0;
   padding-left: 16px;
   border-bottom: 1px solid rgba(0,0,0,.14);
+  .account-button {
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .mat-icon-button {
+    margin-right: 16px;
+  }
   .title{
     padding: 0 16px;
   }

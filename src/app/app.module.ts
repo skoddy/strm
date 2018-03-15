@@ -14,13 +14,17 @@ import { AngularFireModule } from 'angularfire2';
 export const firebaseConfig = environment.firebaseConfig;
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { NotFoundComponent } from './features/not-found/not-found.component';
-import { SettingsComponent } from './features/user/settings/settings.component';
+import { SettingsPortalComponent } from './toolbar/settings-portal/settings-portal.component';
+import { AuthPortalComponent } from './toolbar/auth-portal/auth-portal.component';
+import { NotificationPortalComponent } from './toolbar/notification-portal/notification-portal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundComponent,
-    SettingsComponent
+    SettingsPortalComponent,
+    AuthPortalComponent,
+    NotificationPortalComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,7 @@ import { SettingsComponent } from './features/user/settings/settings.component';
     AngularFireModule.initializeApp(firebaseConfig),
   ],
   providers: [],
-  entryComponents: [SettingsComponent],
+  entryComponents: [SettingsPortalComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
