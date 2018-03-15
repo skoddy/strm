@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import localeDe from '@angular/common/locales/de';
 import { registerLocaleData } from '@angular/common';
 registerLocaleData(localeDe, 'de');
@@ -14,11 +14,13 @@ import { AngularFireModule } from 'angularfire2';
 export const firebaseConfig = environment.firebaseConfig;
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { NotFoundComponent } from './features/not-found/not-found.component';
+import { SettingsComponent } from './features/user/settings/settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -31,6 +33,7 @@ import { NotFoundComponent } from './features/not-found/not-found.component';
     AngularFireModule.initializeApp(firebaseConfig),
   ],
   providers: [],
+  entryComponents: [SettingsComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

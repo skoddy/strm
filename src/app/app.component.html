@@ -11,6 +11,9 @@
     <button mat-icon-button (click)="login()">
         <mat-icon aria-label="Right sidenav toggle">favorite</mat-icon>
       </button>
+      <button mat-icon-button (click)="settings()">
+          <mat-icon aria-label="Right sidenav toggle">person</mat-icon>
+        </button>
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -47,3 +50,4 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
+<ng-template [cdkPortalOutlet]="userSettingsPortal">sdfsdf</ng-template>
