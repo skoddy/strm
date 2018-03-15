@@ -14,4 +14,16 @@ export class Author {
   photoURL: string;
 }
 
+export interface Roles {
+  subscriber?: boolean;
+  owner?: boolean;
+  admin?: boolean;
+}
 
+export interface User {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL: string;
+  roles: Roles;
+}

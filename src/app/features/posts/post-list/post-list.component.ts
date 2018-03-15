@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PostsListService } from '@app/features/posts/posts.service';
 import { interval } from 'rxjs/observable/interval';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';

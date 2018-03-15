@@ -1,6 +1,5 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { routerTransition } from '@app/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component } from '@angular/core';
+import { routerTransition, AuthService } from '@app/core';
 
 @Component({
   selector: 'app-root',
@@ -15,14 +14,12 @@ export class AppComponent {
     { icon: 'home', name: 'Posts', aria: 'Posts', url: '/asd' }
   ];
 
-  options: FormGroup;
 
-  constructor(fb: FormBuilder) {
-    this.options = fb.group({
-      'fixed': false,
-      'top': 0,
-      'bottom': 0,
-    });
+
+  constructor(public auth: AuthService) {
+
   }
-
+  login() {
+    this.auth.googleLogin();
+  }
 }

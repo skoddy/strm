@@ -7,25 +7,19 @@ import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firesto
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
-
-interface User {
-  uid: string;
-  email?: string | null;
-  photoURL?: string;
-  displayName?: string;
-}
+import { User } from '@app/data-model';
 
 @Injectable()
 export class AuthService {
 
   userId: string; // current user uid
-  public user: Observable<User | null>;
+  public user$: Observable<User | null>;
   private userDetails: User = null;
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     public router: Router) {
-    this.user = this.afAuth.authState
+    this.user$ = this.afAuth.authState
       .switchMap(user => {
         if (user) {
           return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
@@ -34,7 +28,7 @@ export class AuthService {
         }
       });
     // Now we subscribe to the User Observable and save some details
-    this.user.subscribe(
+    this.user$.subscribe(
       (user) => {
         if (user) {
           this.userId = user.uid;
@@ -99,10 +93,43 @@ export class AuthService {
       email: user.email || null,
       displayName: user.displayName,
       photoURL: user.photoURL || 'https://goo.gl/Fz9nrQ',
+      roles: {
+        subscriber: true
+      }
     };
 
     return userRef.set(data, { merge: true });
 
   }
+  ///// Role-based Authorization //////
 
+  canRead(user: User): boolean {
+    const allowed = ['admin', 'editor', 'subscriber'];
+    return this.checkAuthorization(user, allowed);
+  }
+
+  canEdit(user: User): boolean {
+    const allowed = ['admin', 'editor'];
+    return this.checkAuthorization(user, allowed);
+  }
+
+  canDelete(user: User): boolean {
+    const allowed = ['admin'];
+    return this.checkAuthorization(user, allowed);
+  }
+
+
+
+  // determines if user has matching role
+  private checkAuthorization(user: User, allowedRoles: string[]): boolean {
+    if (!user) {
+      return false;
+    }
+    for (const role of allowedRoles) {
+      if (user.roles[role]) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
