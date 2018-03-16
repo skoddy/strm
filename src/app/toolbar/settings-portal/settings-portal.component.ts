@@ -9,6 +9,7 @@ import { User } from '@app/data-model';
 })
 export class SettingsPortalComponent implements OnInit {
   user: User;
+  lastKeydown = '';
   messages = [
     { from: 'asdasdas', subject: 'asdsdg sfdsdf sd', content: 'asdasdasdasd' },
     { from: 'asdasdas', subject: 'asdsdg sfdsdf sd', content: 'asdasdasdasd' },

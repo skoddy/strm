@@ -1,22 +1,27 @@
-<div >
+<div>
   <mat-toolbar class="main-header">
     <button (click)="start.open('mouse')" mat-icon-button>
       <mat-icon aria-label="Menu Toggle">menu</mat-icon>
     </button>
     <span class="title">STREAM</span>
     <span class="spacer"></span>
-    <button mat-icon-button (click)="end.toggle()">
-      <mat-icon aria-label="Right sidenav toggle">favorite</mat-icon>
+    <button mat-icon-button routerLink="posts/new">
+      <mat-icon aria-label="Right sidenav toggle">add_circle</mat-icon>
     </button>
-   
-    <a (click)="settings()" *ngIf="auth.user$ | async else loginbutton">
+    <button mat-icon-button (click)="end.toggle()">
+      <mat-icon aria-label="Right sidenav toggle">people</mat-icon>
+    </button>
+    <button mat-icon-button (click)="end.toggle()">
+      <mat-icon aria-label="Right sidenav toggle">notifications</mat-icon>
+    </button>
+    <a (click)="openSettings()" *ngIf="auth.user$ | async else loginbutton">
       <img class="account-button" [src]="auth.photoURL" height="30" width="30" align="middle">
     </a>
-<ng-template #loginbutton>
-    <button mat-button (click)="login()">
-        <mat-icon aria-label="Right sidenav toggle">move_to_inbox</mat-icon> Anmelden
+    <ng-template #loginbutton>
+      <button mat-button (click)="login()">
+        Anmelden
       </button>
-</ng-template>
+    </ng-template>
   </mat-toolbar>
   <mat-sidenav-container id="content" class="main-container">
     <mat-sidenav position="start" #start mode="side" opened="false" class="left-sidenav" fixedInViewport="true" fixedTopGap="0"
@@ -46,4 +51,4 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
-<ng-template [cdkPortalOutlet]="portal"></ng-template>
+<ng-template cdk-portal></ng-template>

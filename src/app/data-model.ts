@@ -1,5 +1,4 @@
 export class Post {
-
   createdAt: Date;
   category: string;
   title: string;

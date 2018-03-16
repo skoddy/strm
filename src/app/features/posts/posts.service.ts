@@ -51,7 +51,7 @@ export class PostsListService {
       path,
       field,
       limitFirst: 9,
-      limitMore: 2,
+      limitMore: 9,
       reverse: true,
       prepend: false,
       ...opts
