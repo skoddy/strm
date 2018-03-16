@@ -42,20 +42,15 @@ export class AppComponent {
     const config = new OverlayConfig({
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',
-      positionStrategy: this.overlay.position().global().centerHorizontally()
+      positionStrategy: this.overlay.position().global()
     });
-
-    config.positionStrategy = this.overlay.position()
-      .global()
-      .centerHorizontally()
-      .top(`${this.nextPosition}px`);
-
-    this.nextPosition += 30;
 
     const overlayRef = this.overlay.create(config);
 
     const componentRef = overlayRef
       .attach(new ComponentPortal(SettingsPortalComponent, this.viewContainerRef));
+
+    componentRef.instance.overlayRef = overlayRef;
 
     overlayRef.backdropClick().subscribe(() => overlayRef.detach());
 

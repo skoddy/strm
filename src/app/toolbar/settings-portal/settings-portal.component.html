@@ -6,9 +6,9 @@
   </mat-card-header>
 
   <mat-nav-list>
-    <a mat-list-item routerLink="user/{{auth.uid}}">
+    <a mat-list-item routerLink="user/{{auth.uid}}" (click)="close()">
       <mat-icon matListIcon>account_box</mat-icon> Mein Profil </a>
-    <a mat-list-item routerLink="account">
+    <a mat-list-item routerLink="account" (click)="close()">
       <mat-icon matListIcon>settings</mat-icon> Einstellungen </a>
     <a mat-list-item>
       <mat-icon matListIcon>brightness_6</mat-icon> Dunkelmodus <mat-slide-toggle>Aus</mat-slide-toggle></a>
