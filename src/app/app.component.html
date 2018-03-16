@@ -1,22 +1,25 @@
 <div>
-  <mat-toolbar class="main-header">
+  <mat-toolbar color="primary" class="main-header">
     <button (click)="start.open('mouse')" mat-icon-button>
       <mat-icon aria-label="Menu Toggle">menu</mat-icon>
     </button>
     <span class="title">STREAM</span>
     <span class="spacer"></span>
-    <button mat-icon-button routerLink="posts/new">
-      <mat-icon aria-label="Right sidenav toggle">add_circle</mat-icon>
-    </button>
-    <button mat-icon-button (click)="end.toggle()">
-      <mat-icon aria-label="Right sidenav toggle">people</mat-icon>
-    </button>
-    <button mat-icon-button (click)="end.toggle()">
-      <mat-icon aria-label="Right sidenav toggle">notifications</mat-icon>
-    </button>
-    <a (click)="openSettings()" *ngIf="auth.user$ | async else loginbutton">
-      <img class="account-button" [src]="auth.photoURL" height="30" width="30" align="middle">
-    </a>
+    <div  *ngIf="auth.user$ | async then loggedIn else loginbutton"></div>
+    <ng-template #loggedIn>
+      <button mat-icon-button routerLink="posts/new" matTooltip="Neuen Post erstellen" matTooltipShowDelay="600">
+        <mat-icon aria-label="Right sidenav toggle">add_circle</mat-icon>
+      </button>
+      <button mat-icon-button (click)="end.toggle()" matTooltip="Freunde" matTooltipShowDelay="600">
+        <mat-icon aria-label="Right sidenav toggle">people</mat-icon>
+      </button>
+      <button mat-icon-button (click)="end.toggle()" matTooltip="Benachrichtigungen" matTooltipShowDelay="600">
+        <mat-icon aria-label="Right sidenav toggle">notifications</mat-icon>
+      </button>
+      <a (click)="openSettings()">
+        <img class="account-button" [src]="auth.photoURL" height="30" width="30" align="middle">
+      </a>
+    </ng-template>
     <ng-template #loginbutton>
       <button mat-button (click)="login()">
         Anmelden

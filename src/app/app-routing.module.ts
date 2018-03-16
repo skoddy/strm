@@ -7,6 +7,11 @@ import { ProfileComponent } from '@app/features/user/profile/profile.component';
 const routes: Routes = [
   {
     path: '',
+    redirectTo: 'posts',
+    pathMatch: 'full'
+  },
+  {
+    path: 'posts',
     loadChildren: 'app/features/posts/posts.module#PostsModule'
   },
   {
