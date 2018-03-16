@@ -25,7 +25,6 @@ export class SettingsPortalComponent implements OnInit {
   constructor(public auth: AuthService) { }
 
   ngOnInit() {
-    this.auth.user$.subscribe(user => this.user = user);
   }
   logout() {
     this.auth.signOut();

@@ -102,7 +102,8 @@ import {
     MatToolbarModule,
     MatIconModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSlideToggleModule
 
   ],
   declarations: []

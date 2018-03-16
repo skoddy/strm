@@ -17,6 +17,8 @@ import { NotFoundComponent } from './features/not-found/not-found.component';
 import { SettingsPortalComponent } from './toolbar/settings-portal/settings-portal.component';
 import { AuthPortalComponent } from './toolbar/auth-portal/auth-portal.component';
 import { NotificationPortalComponent } from './toolbar/notification-portal/notification-portal.component';
+import { AccountComponent } from './features/account/account.component';
+import { ProfileComponent } from './features/user/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -24,16 +26,18 @@ import { NotificationPortalComponent } from './toolbar/notification-portal/notif
     NotFoundComponent,
     SettingsPortalComponent,
     AuthPortalComponent,
-    NotificationPortalComponent
+    NotificationPortalComponent,
+    AccountComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    CoreModule,
+    SharedModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    CoreModule,
-    SharedModule,
     AngularFireModule.initializeApp(firebaseConfig),
   ],
   providers: [],

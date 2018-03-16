@@ -60,7 +60,10 @@ export class AuthService {
   get photoURL(): string {
     return this.userDetails.photoURL || '';
   }
-
+  // Returns current user photo
+  get email(): string {
+    return this.userDetails.email || '';
+  }
   googleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);

@@ -13,7 +13,6 @@ import { tap, filter } from 'rxjs/operators';
   animations: [routerTransition],
 })
 export class AppComponent {
-  @ViewChildren(CdkPortal) templatePortals: QueryList<Portal<any>>;
   portal: Portal<any>;
   isOpen = false;
   title = 'app';
