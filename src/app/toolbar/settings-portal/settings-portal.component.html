@@ -1,5 +1,5 @@
 <div class="settingsportal mat-elevation-z8" *ngIf="auth.user$ | async">
-  <mat-card>
+  <mat-card class="header">
     <mat-card-header class="mat-typography">
       <div mat-card-avatar class="header-image" [ngStyle]="{'background-image': 'url(' + auth.photoURL + ')'}"></div>
       <mat-card-title>{{auth.displayName}}</mat-card-title>
@@ -8,7 +8,7 @@
     
   </mat-card>
 
-  <mat-nav-list>
+  <mat-nav-list class="menu-list">
     <a mat-list-item routerLink="user/{{auth.uid}}" (click)="close()">
       <mat-icon matListIcon>account_box</mat-icon> Mein Profil </a>
     <a mat-list-item routerLink="account" (click)="close()">

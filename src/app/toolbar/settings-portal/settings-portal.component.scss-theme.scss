@@ -3,9 +3,13 @@
 @mixin strm-settings-component-theme($theme) {
   $accent: map-get($theme, accent);
   $primary: map-get($theme, primary);
-  .settingsportal {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  .header {
       background-color: mat-color($primary);
   }
 
-
+  .menu-list {
+    background-color: mat-color($background, background);
+}
 }

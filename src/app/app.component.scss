@@ -10,9 +10,6 @@
   width: 240px;
   border-right: 1px solid rgba(0,0,0,.14);
 
-  .mat-icon {
-    color: hsl(0, 0%, 53.3%);
-  }
   .mat-list {
     padding: 0;
     .mat-list-item {
@@ -26,6 +23,7 @@
       .mat-icon {
         padding-left: 8px;
         padding-right: 40px;
+        color: hsl(0, 0%, 53.3%);
       }
     }
   }
@@ -38,6 +36,10 @@
   width: 200px;
   z-index: 1!important;
   border-left: 1px solid rgba(0,0,0,.14);
+}
+.left-header {
+  height: 56px;
+  
 }
 .main-header {
   position: fixed;

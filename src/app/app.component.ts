@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChildren, QueryList, HostBinding } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChildren, QueryList, HostBinding, ChangeDetectorRef } from '@angular/core';
 import { routerTransition, AuthService, LocalStorageService, DatabaseService } from '@app/core';
 import { ComponentPortal, Portal, CdkPortal } from '@angular/cdk/portal';
 import { SettingsPortalComponent } from '@app/toolbar/settings-portal/settings-portal.component';
@@ -6,6 +6,7 @@ import { User } from '@app/data-model';
 import { OverlayConfig, Overlay, OverlayContainer } from '@angular/cdk/overlay';
 import { tap, filter } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-root',
@@ -27,20 +28,26 @@ export class AppComponent implements OnInit {
     { icon: 'home', name: 'Home', aria: 'Home', url: '/' },
     { icon: 'home', name: 'Posts', aria: 'Posts', url: '/asd' }
   ];
-  themes = [
-    { value: 'DEFAULT-THEME', label: 'Blue' },
-    { value: 'LIGHT-THEME', label: 'Light' },
-    { value: 'NATURE-THEME', label: 'Nature' },
-    { value: 'BLACK-THEME', label: 'Dark' }
-  ];
   user: User;
+  mobileQuery: MediaQueryList;
+  private _mobileQueryListener: () => void;
   @HostBinding('class') componentCssClass;
   constructor(
     public auth: AuthService,
     public overlay: Overlay,
     public viewContainerRef: ViewContainerRef,
     public overlayContainer: OverlayContainer,
-    public db: DatabaseService) {
+    public db: DatabaseService,
+    changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher) {
+      // media matcher
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => {
+      if (!changeDetectorRef['destroyed']) {
+        changeDetectorRef.detectChanges();
+      }
+    };
+    this.mobileQuery.addListener(this._mobileQueryListener);
         this.auth.user$.subscribe(user => {
       if (user) {
         this.user = user;
@@ -58,7 +65,7 @@ export class AppComponent implements OnInit {
 
   }
   setTheme(darkmode: boolean) {
-    this.theme = darkmode ? 'black-theme' : 'light-theme';
+    this.theme = darkmode ? 'dark-theme' : 'light-theme';
     this.componentCssClass = this.theme;
     const classList = this.overlayContainer.getContainerElement().classList;
     const toRemove = Array.from(classList).filter((item: string) =>

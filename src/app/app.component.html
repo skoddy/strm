@@ -1,6 +1,6 @@
 <div>
   <mat-toolbar color="primary" class="main-header">
-    <button (click)="start.open('mouse')" mat-icon-button>
+    <button (click)="start.toggle()" mat-icon-button>
       <mat-icon aria-label="Menu Toggle">menu</mat-icon>
     </button>
     <span class="title">STREAM</span>
@@ -27,21 +27,27 @@
     </ng-template>
   </mat-toolbar>
   <mat-sidenav-container id="content" class="main-container">
-    <mat-sidenav position="start" #start mode="side" opened="false" class="left-sidenav" fixedInViewport="true" fixedTopGap="0"
+    <mat-sidenav position="start" #start 
+    [mode]="mobileQuery.matches ? 'over' : 'side'" 
+    [opened]="mobileQuery.matches ? 'false' : 'true'"
+    class="left-sidenav" 
+    fixedInViewport="true" 
+    [fixedTopGap]="mobileQuery.matches ? '0' : '56'"
       fixedBottomGap="0">
-      <mat-list role="list">
-        <mat-list-item role="listitem">
-          <button (click)="start.close('mouse')" mat-icon-button>
+      <div *ngIf="mobileQuery.matches">
+        <mat-toolbar class="left-header" color="primary">
+          <button (click)="start.toggle()" mat-icon-button>
             <mat-icon aria-label="Menu Toggle">menu</mat-icon>
           </button>
-          <span class="title mat-title">STREAM</span>
-        </mat-list-item>
-      </mat-list>
-      <mat-divider></mat-divider>
+          <span class="title">STREAM</span>
+        </mat-toolbar>
+      </div>
+
       <mat-nav-list>
-        <a mat-list-item [routerLink]="link.url" routerLinkActive="left-sidenav-link-active" *ngFor="let link of links">
-          <mat-icon>{{ link.icon }}</mat-icon> {{ link.name }} </a>
+        <a mat-list-item [routerLink]="link.url" routerLinkActive="left-sidenav-link-active" (click)="mobileQuery.matches ? start.close('mouse') : 'false' " *ngFor="let link of links">
+          <mat-icon class="left-sidenav-icon">{{ link.icon }}</mat-icon> {{ link.name }} </a>
       </mat-nav-list>
+
     </mat-sidenav>
     <mat-sidenav #end position="end" mode="side" opened="false" class="right-sidenav" fixedInViewport="true" fixedTopGap="56"
       fixedBottomGap="0">

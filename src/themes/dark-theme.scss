@@ -1,0 +1,4 @@
+$strm-dark-primary: mat-palette($mat-blue-grey);
+$strm-dark-accent:  mat-palette($mat-amber, A200, A100, A400);
+$strm-dark-warn:    mat-palette($mat-deep-orange);
+$strm-dark-theme:   mat-dark-theme($strm-dark-primary, $strm-dark-accent, $strm-dark-warn);
