@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChildren, QueryList } from '@angular/core';
-import { routerTransition, AuthService } from '@app/core';
+import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChildren, QueryList, HostBinding } from '@angular/core';
+import { routerTransition, AuthService, LocalStorageService, DatabaseService } from '@app/core';
 import { ComponentPortal, Portal, CdkPortal } from '@angular/cdk/portal';
 import { SettingsPortalComponent } from '@app/toolbar/settings-portal/settings-portal.component';
 import { User } from '@app/data-model';
-import { OverlayConfig, Overlay } from '@angular/cdk/overlay';
+import { OverlayConfig, Overlay, OverlayContainer } from '@angular/cdk/overlay';
 import { tap, filter } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,12 @@ import { tap, filter } from 'rxjs/operators';
   styleUrls: ['./app.component.scss'],
   animations: [routerTransition],
 })
-export class AppComponent {
+
+export class AppComponent implements OnInit {
+
+  theme: string;
+  darkmode = false;
+  settings$: Observable<{}>;
   portal: Portal<any>;
   isOpen = false;
   title = 'app';
@@ -21,12 +27,46 @@ export class AppComponent {
     { icon: 'home', name: 'Home', aria: 'Home', url: '/' },
     { icon: 'home', name: 'Posts', aria: 'Posts', url: '/asd' }
   ];
+  themes = [
+    { value: 'DEFAULT-THEME', label: 'Blue' },
+    { value: 'LIGHT-THEME', label: 'Light' },
+    { value: 'NATURE-THEME', label: 'Nature' },
+    { value: 'BLACK-THEME', label: 'Dark' }
+  ];
   user: User;
-  constructor(public auth: AuthService, public overlay: Overlay, public viewContainerRef: ViewContainerRef) {
-    this.auth.user$.subscribe(user => this.user = user);
+  @HostBinding('class') componentCssClass;
+  constructor(
+    public auth: AuthService,
+    public overlay: Overlay,
+    public viewContainerRef: ViewContainerRef,
+    public overlayContainer: OverlayContainer,
+    public db: DatabaseService) {
+        this.auth.user$.subscribe(user => {
+      if (user) {
+        this.user = user;
+        console.log(this.user.uid);
+        console.log(this.user.darkmode);
+       return this.setTheme(this.user.darkmode);
+      } else {
+       return this.setTheme(false);
+      }
+    });
 
   }
 
+  ngOnInit() {
+
+  }
+  setTheme(darkmode: boolean) {
+    this.theme = darkmode ? 'black-theme' : 'light-theme';
+    this.componentCssClass = this.theme;
+    const classList = this.overlayContainer.getContainerElement().classList;
+    const toRemove = Array.from(classList).filter((item: string) =>
+      item.includes('-theme')
+    );
+    classList.remove(...toRemove);
+    classList.add(this.theme);
+  }
   login() {
     this.auth.googleLogin();
   }
@@ -42,6 +82,7 @@ export class AppComponent {
     const config = new OverlayConfig({
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',
+      panelClass: '',
       positionStrategy: this.overlay.position().global()
     });
 

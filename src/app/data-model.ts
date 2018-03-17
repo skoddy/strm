@@ -25,4 +25,5 @@ export interface User {
   displayName: string;
   photoURL: string;
   roles: Roles;
+  darkmode?: boolean;
 }

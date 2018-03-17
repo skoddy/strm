@@ -1,0 +1,11 @@
+@import '~@angular/material/theming';
+
+@mixin strm-settings-component-theme($theme) {
+  $accent: map-get($theme, accent);
+  $primary: map-get($theme, primary);
+  .settingsportal {
+      background-color: mat-color($primary);
+  }
+
+
+}

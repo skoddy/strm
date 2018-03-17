@@ -60,6 +60,7 @@ export class AuthService {
   get photoURL(): string {
     return this.userDetails.photoURL || '';
   }
+
   // Returns current user photo
   get email(): string {
     return this.userDetails.email || '';
