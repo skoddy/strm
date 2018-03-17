@@ -3,9 +3,23 @@
 </div>
 
 <div *ngIf="posts.data | async; let posts;" >
-  <div class="home-container">
+
     <div *ngFor="let post of posts">
-      <a routerLink="read/{{post.id}}">
+        <mat-card class="post-card">
+            <mat-card-header>
+                <div mat-card-avatar class="header-image" [ngStyle]="{'background-image': 'url(' + post.author.photoURL + ')'}"></div>
+              <mat-card-title><a routerLink="/user/{{post.author.uid}}" class="user-link">{{post.author.displayName}}</a></mat-card-title>
+              <mat-card-subtitle>{{post.createdAt | date : 'd. LLLL yyyy, H:mm':'':'de'}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="post-content mat-body-2">{{post.content | slice:0:150}}...</p>
+            </mat-card-content>
+            <mat-card-actions align="end">
+              <button mat-button>LIKE</button>
+              <button mat-button>SHARE</button>
+            </mat-card-actions>
+          </mat-card>
+<!--       <a routerLink="read/{{post.id}}">
         <mat-card class="post-card" (mouseenter)="onHovering($event)" (mouseleave)="onUnovering($event)">
           <mat-card-header>
             <div mat-card-avatar class="header-image" [ngStyle]="{'background-image': 'url(' + post.author.photoURL + ')'}"></div>
@@ -13,13 +27,13 @@
             <mat-card-subtitle>[{{post.category}}] - {{post.createdAt | date : 'd. LLLL yyyy, H:mm':'':'de'}}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>{{post.content | slice:0:150}}...</mat-card-content>
-
+          <mat-card-actions>
+              <button mat-button>LIKE</button>
+              <button mat-button >SHARE</button>
+            </mat-card-actions>
         </mat-card>
-      </a>
-    </div>
+      </a> -->
+
   </div>
 </div>
 <p *ngIf="posts.done | async"> Ende </p>
-<button (click)="posts.more()" mat-button>more</button>
-<button routerLink="new" mat-button>new</button>
-

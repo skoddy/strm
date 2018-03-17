@@ -11,10 +11,11 @@
 @import 'nature-theme.scss';
 
 @import 'app/toolbar/settings-portal/settings-portal.component.scss-theme';
-
+@import 'app/features/posts/post.component.scss-theme';
 
 @mixin custom-components-theme($theme) {
   @include strm-settings-component-theme($theme);
+  @include strm-post-component-theme($theme);
 
 }
 .default-theme {

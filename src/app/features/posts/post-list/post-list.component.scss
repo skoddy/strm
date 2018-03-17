@@ -1,28 +1,27 @@
-.home-container {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    z-index: 0;
-    mat-card {
-        max-width: 300px;
+.user-link {
+    text-decoration: none;
+}
+    .post-card {
+        max-width: 400px;
         min-width: 300px;
-        height: 185px;
-        display: inline-block;
-        margin-top: 16px;
-        margin-left: 16px;
+margin-left: auto;
+margin-right: auto;
+margin-top: 16px;
+
         .header-image {
 
             background-size: cover;
         }
-        mat-card-content {
+        .post-cat {
+            font-weight: bold;
+        }
+        .post-content {
             text-align: justify;
             white-space: pre-line;
         }
     }
 
-}
+
 .loader {
     height: 3px;
     position: fixed;

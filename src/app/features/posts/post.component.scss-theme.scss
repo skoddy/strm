@@ -1,0 +1,16 @@
+@import '~@angular/material/theming';
+
+@mixin strm-post-component-theme($theme) {
+  $accent: map-get($theme, accent);
+  $primary: map-get($theme, primary);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+a:link, a:visited, a:hover, a:active {
+    background-color:none;
+    color:mat-color($foreground, text);
+    text-align: center; 
+    text-decoration: none;
+
+}
+}
