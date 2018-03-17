@@ -3,6 +3,7 @@ import { PostsListService } from '@app/features/posts/posts.service';
 import { interval } from 'rxjs/observable/interval';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-post-list',
@@ -11,6 +12,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 })
 
 export class PostsListComponent implements OnInit {
+
+  unsubscribe: Subscription;
   mouseOverTimer: any;
 
   constructor(
@@ -25,7 +28,9 @@ export class PostsListComponent implements OnInit {
   ngOnDestroy() {
     window.removeEventListener('scroll', this.posts.scroll, true);
     // reset data
+    this.unsubscribe = this.posts.data.subscribe();
     this.posts._data = new BehaviorSubject([]);
+    this.unsubscribe.unsubscribe();
     console.log('destroyed');
   }
 
