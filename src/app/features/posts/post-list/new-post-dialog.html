@@ -23,7 +23,6 @@
           </mat-form-field>
     
         <mat-card-actions>
-            <button mat-button (click)="addRandom()">add random</button>
           <button mat-button (click)="fillForm()">autofill</button>
           <button color="primary" [disabled]="data.content?.length < 2 || data.content?.length > 500 || !data.category" mat-raised-button (click)="dialogRef.close(data)">STREAM!</button>
         </mat-card-actions>
