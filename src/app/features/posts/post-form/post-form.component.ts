@@ -5,11 +5,15 @@ import * as faker from 'faker';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { Location } from '@angular/common';
+
+
 @Component({
   selector: 'app-post-form',
   templateUrl: './post-form.component.html',
   styleUrls: ['./post-form.component.scss']
 })
+
 export class PostFormComponent implements OnInit {
   title: string;
   subheader: string;
@@ -25,15 +29,18 @@ export class PostFormComponent implements OnInit {
   constructor(private afs: AngularFirestore,
     private db: DatabaseService,
     private auth: AuthService,
-    public router: Router) { }
+    public router: Router,
+    private location: Location) { }
 
   ngOnInit() {
   }
   fillForm() {
     this.category = this.getRandomItem(this.categories);
-    this.title = faker.lorem.sentence(6);
-    this.subheader = faker.lorem.sentences(5);
-    this.content = faker.lorem.sentences(25);
+
+    this.content = faker.lorem.sentences(10);
+  }
+  back() {
+    this.location.back();
   }
   addRandom() {
     const newPostId = this.db.getNewKey('posts');
@@ -47,14 +54,12 @@ export class PostFormComponent implements OnInit {
     const postData: Post = {
       createdAt: date,
       category: this.getRandomItem(this.categories),
-      title: faker.lorem.sentence(6),
-      subheader: faker.lorem.sentences(5),
       content: faker.lorem.sentences(25),
       author: authorData
     };
 
     this.add(postData, newPostId).then(() =>
-      this.router.navigate([`posts/read/${newPostId}`])
+      this.router.navigate([`posts`])
     );
   }
   newPost() {
@@ -69,14 +74,12 @@ export class PostFormComponent implements OnInit {
     const postData: Post = {
       createdAt: new Date(),
       category: this.category,
-      title: this.strip_html_tags(this.title),
-      subheader: this.strip_html_tags(this.subheader),
       content: this.strip_html_tags(this.content),
       author: authorData
     };
 
     this.add(postData, newPostId).then(() =>
-      this.router.navigate([`posts/read/${newPostId}`])
+      this.back()
     );
   }
 

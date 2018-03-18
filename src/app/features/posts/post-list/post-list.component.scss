@@ -1,15 +1,20 @@
 .user-link {
     text-decoration: none;
 }
+.container 
+{
+
+    position:relative;
+
+}
     .post-card {
         max-width: 400px;
         min-width: 300px;
-margin-left: auto;
-margin-right: auto;
-margin-top: 16px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 16px;
 
         .header-image {
-
             background-size: cover;
         }
         .post-cat {
@@ -28,4 +33,42 @@ margin-top: 16px;
     top: 0px;
     z-index: 100;
     left: 0;
+}
+.wrapper {
+    position: relative;
+    margin: 0 auto;
+    height: 1000px;
+  }
+.button-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 90px;
+  }
+  #add {
+    position: fixed;
+    bottom: 30px;
+  }
+  .new-post-full-screen-dialog .mat-dialog-container {
+    max-width: none;
+    width: 100vw;
+    height: 100vh;
+    
+  }
+.myBackdrop{
+      padding: 0!important;
+  }
+  mat-card {
+    max-width: 400px;
+    min-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    .mat-form-field {
+      width: 100%;
+    }
+  }
+  .title {
+    margin-left: 24px;
   }

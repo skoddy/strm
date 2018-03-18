@@ -2,9 +2,9 @@
   <mat-progress-bar class="loader" mode="indeterminate"></mat-progress-bar>
 </div>
 
-<div *ngIf="posts.data | async; let posts;" >
+<div *ngIf="posts.data | async; let posts;" class="wrapper">
 
-    <div *ngFor="let post of posts">
+    <div *ngFor="let post of posts" >
         <mat-card class="post-card">
             <mat-card-header>
                 <div mat-card-avatar class="header-image" [ngStyle]="{'background-image': 'url(' + post.author.photoURL + ')'}"></div>
@@ -12,7 +12,7 @@
               <mat-card-subtitle>{{post.createdAt | date : 'd. LLLL yyyy, H:mm':'':'de'}}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
-              <p class="post-content mat-body-2">{{post.content | slice:0:150}}...</p>
+              <p class="post-content mat-body-1">{{post.content | slice:0:150}}...</p>
             </mat-card-content>
             <mat-card-actions align="end">
               <button mat-button>LIKE</button>
@@ -33,7 +33,15 @@
             </mat-card-actions>
         </mat-card>
       </a> -->
+    </div>
+    
 
+      <div class="button-wrapper">
+          <div  *ngIf="auth.user$ | async">
+              <button id="add" mat-fab (click)="openDialog()">
+                <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+              </button>
+            </div>
+        </div>
   </div>
-</div>
 <p *ngIf="posts.done | async"> Ende </p>

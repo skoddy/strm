@@ -7,9 +7,6 @@
     <span class="spacer"></span>
     <div  *ngIf="auth.user$ | async then loggedIn else loginbutton"></div>
     <ng-template #loggedIn>
-      <button mat-icon-button routerLink="posts/new" matTooltip="Neuen Post erstellen" matTooltipShowDelay="600">
-        <mat-icon aria-label="Right sidenav toggle">add_circle</mat-icon>
-      </button>
       <button mat-icon-button (click)="end.toggle()" matTooltip="Freunde" matTooltipShowDelay="600">
         <mat-icon aria-label="Right sidenav toggle">people</mat-icon>
       </button>
@@ -29,7 +26,7 @@
   <mat-sidenav-container id="content" class="main-container">
     <mat-sidenav position="start" #start 
     [mode]="mobileQuery.matches ? 'over' : 'side'" 
-    [opened]="mobileQuery.matches ? 'false' : 'true'"
+    [opened]="mobileQuery.matches ? 'false' : 'false'"
     class="left-sidenav" 
     fixedInViewport="true" 
     [fixedTopGap]="mobileQuery.matches ? '0' : '56'"

@@ -1,6 +1,8 @@
-<mat-card>
-  profile works!
-</mat-card>
+<mat-toolbar>
+  <span *ngIf="user$  | async as user">{{user.displayName}}</span>
+</mat-toolbar>
 <div *ngFor="let post of myposts$ | async">
-  {{post.content}}
+  <mat-card>
+    {{post.content}}
+  </mat-card>
 </div>

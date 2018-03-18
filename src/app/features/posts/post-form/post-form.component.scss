@@ -1,8 +1,12 @@
 mat-card {
   width: 500px;
-  margin: 16px;
-  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 16px;
   .mat-form-field {
     width: 100%;
   }
+}
+.title {
+  margin-left: 24px;
 }

@@ -1,0 +1,32 @@
+<mat-toolbar color="primary">
+        <button mat-icon-button mat-dialog-close>
+            <mat-icon aria-label="Back">arrow_back</mat-icon>
+          </button>
+        <span class="title">Neuer Post</span>
+      </mat-toolbar>
+    <div>
+    
+      <mat-card>
+      
+        <mat-form-field class="stream-list-select-cat">
+          <mat-select #cat [(ngModel)]="data.category" placeholder="Kategorie">
+            <mat-option value="Programmierung">Programmierung</mat-option>
+            <mat-option value="Netzwerke">Netzwerke</mat-option>
+            <mat-option value="Prüfung">Prüfung</mat-option>
+            <mat-option value="Sonstiges">Sonstiges</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="stream-list-create-textfield">
+            <textarea #msg [(ngModel)]="data.content" matInput placeholder="Was gibt's neues?" matTextareaAutosize matAutosizeMinRows="10"
+              matAutosizeMaxRows="30"></textarea>
+            <mat-hint align="end">{{msg.value.length}} / 500</mat-hint>
+          </mat-form-field>
+    
+        <mat-card-actions>
+            <button mat-button (click)="addRandom()">add random</button>
+          <button mat-button (click)="fillForm()">autofill</button>
+          <button color="primary" [disabled]="data.content?.length < 2 || data.content?.length > 500 || !data.category" mat-raised-button (click)="dialogRef.close(data)">STREAM!</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+    

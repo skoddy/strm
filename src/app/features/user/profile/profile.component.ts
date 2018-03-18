@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { DatabaseService, AuthService } from '@app/core';
 import { Observable } from 'rxjs/Observable';
-import { Post } from '@app/data-model';
+import { Post, User } from '@app/data-model';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs/Subscription';
 })
 
 export class ProfileComponent implements OnInit, OnDestroy {
+  user$: Observable<{}>;
   unsubscribe: Subscription;
   @Input() id: string;
   myposts$: Observable<any[]>;
@@ -19,6 +20,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     this.myposts$ = this.db.colWithIds$<Post>('posts', ref => ref.where('author.uid', '==', id).orderBy('createdAt', 'desc'));
     this.unsubscribe = this.myposts$.subscribe();
+    this.user$ = this.db.doc$<User>(`users/${id}`);
   }
 
   ngOnInit() {
