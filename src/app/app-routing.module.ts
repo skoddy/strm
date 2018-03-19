@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NotFoundComponent } from '@app/features/not-found/not-found.component';
 import { AccountComponent } from '@app/features/account/account.component';
 import { ProfileComponent } from '@app/features/user/profile/profile.component';
+import { PostsListComponent } from '@app/features/posts/post-list/post-list.component';
 
 const routes: Routes = [
   {
@@ -12,7 +13,7 @@ const routes: Routes = [
   },
   {
     path: 'posts',
-    loadChildren: 'app/features/posts/posts.module#PostsModule'
+    component: PostsListComponent
   },
   {
     path: 'account',

@@ -19,6 +19,7 @@ import { AuthPortalComponent } from './toolbar/auth-portal/auth-portal.component
 import { NotificationPortalComponent } from './toolbar/notification-portal/notification-portal.component';
 import { AccountComponent } from './features/account/account.component';
 import { ProfileComponent } from './features/user/profile/profile.component';
+import { PostsListComponent, NewPostDialogComponent } from '@app/features/posts/post-list/post-list.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,9 @@ import { ProfileComponent } from './features/user/profile/profile.component';
     AuthPortalComponent,
     NotificationPortalComponent,
     AccountComponent,
-    ProfileComponent
+    ProfileComponent,
+    PostsListComponent,
+    NewPostDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,7 @@ import { ProfileComponent } from './features/user/profile/profile.component';
     AngularFireModule.initializeApp(firebaseConfig),
   ],
   providers: [],
-  entryComponents: [SettingsPortalComponent],
+  entryComponents: [SettingsPortalComponent, NewPostDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

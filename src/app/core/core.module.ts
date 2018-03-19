@@ -9,13 +9,14 @@ import { AuthGuard } from './auth/auth.guard';
 import { CanReadGuard } from './auth/can-read.guard';
 import { AdminGuard } from './auth/admin.guard';
 import { LocalStorageService } from '@app/core/local-storage/local-storage.service';
+import { PostsService } from '@app/core/posts/posts.service';
 @NgModule({
   imports: [
     AngularFireAuthModule,
     AngularFirestoreModule,
   ],
   declarations: [],
-  providers: [AuthService, AuthGuard, DatabaseService, LocalStorageService]
+  providers: [AuthService, AuthGuard, DatabaseService, LocalStorageService, PostsService]
 })
 export class CoreModule {
   constructor(

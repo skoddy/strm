@@ -3,7 +3,6 @@ import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
-import { AuthService } from '@app/core';
 import 'rxjs/add/operator/switchMap';
 import * as firebase from 'firebase/app';
 import { Post } from '../../data-model';
@@ -19,7 +18,7 @@ export interface QueryConfig {
 }
 
 @Injectable()
-export class PostsListService {
+export class PostsService {
   content: string;
   category: string;
   query: QueryConfig;
@@ -33,9 +32,7 @@ export class PostsListService {
   public done: Observable<boolean> = this._done.asObservable();
   public loading: Observable<boolean> = this._loading.asObservable();
 
-  constructor(
-    private afs: AngularFirestore,
-    private auth: AuthService) {}
+  constructor(private afs: AngularFirestore) { }
 
   scroll = (e): void => {
     const top = e.target.scrollTop;
@@ -125,7 +122,7 @@ export class PostsListService {
       },
       err => console.error('Observer got an error: ' + err),
       () => console.log('Observer got a complete notification')
-    );
+      );
   }
 
 }

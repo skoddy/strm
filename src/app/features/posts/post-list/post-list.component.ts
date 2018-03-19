@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
-import { PostsListService } from '@app/features/posts/posts.service';
 import { interval } from 'rxjs/observable/interval';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Subscription } from 'rxjs/Subscription';
-import { AuthService, DatabaseService } from '@app/core';
+import { AuthService, DatabaseService, PostsService } from '@app/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Router } from '@angular/router';
@@ -31,7 +30,7 @@ export class PostsListComponent implements OnInit {
     'Sonstiges'
   ];
   constructor(
-    public posts: PostsListService,
+    public posts: PostsService,
     public auth: AuthService,
     public dialog: MatDialog,
     private db: DatabaseService,
