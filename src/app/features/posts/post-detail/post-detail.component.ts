@@ -10,9 +10,10 @@ import { AngularFirestore } from 'angularfire2/firestore';
   templateUrl: './post-detail.component.html',
   styleUrls: ['./post-detail.component.scss']
 })
+
 export class PostDetailComponent implements OnInit {
   postDoc: any;
-  @Input() id: string;
+  @Input() post: string;
   post$: Observable<Post>;
 
   constructor(public route: ActivatedRoute, private afs: AngularFirestore) { }

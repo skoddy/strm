@@ -1,8 +1,8 @@
 <mat-toolbar>
   <span *ngIf="user$  | async as user">{{user.displayName}}</span>
 </mat-toolbar>
-<div *ngFor="let post of myposts$ | async">
-  <mat-card>
-    {{post.content}}
-  </mat-card>
+<div *ngIf="posts.data | async; let posts;">
+  <div *ngFor="let post of posts">
+    <app-post-detail [post]="post"></app-post-detail>
+  </div>
 </div>

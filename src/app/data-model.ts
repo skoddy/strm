@@ -1,6 +1,5 @@
 export class Post {
   createdAt: Date;
-  category: string;
   content: string;
   author: Author;
 }

@@ -30,7 +30,7 @@ export class DatabaseService {
     return newKey;
   }
 
-  private batch(updates: any, type: string) {
+  batch(updates: any, type: string) {
     const batch = firebase.firestore().batch();
     for (const key in updates) {
       if (updates.hasOwnProperty(key)) {

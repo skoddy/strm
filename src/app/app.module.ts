@@ -20,6 +20,7 @@ import { NotificationPortalComponent } from './toolbar/notification-portal/notif
 import { AccountComponent } from './features/account/account.component';
 import { ProfileComponent } from './features/user/profile/profile.component';
 import { PostsListComponent, NewPostDialogComponent } from '@app/features/posts/post-list/post-list.component';
+import { PostDetailComponent } from '@app/features/posts/post-detail/post-detail.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { PostsListComponent, NewPostDialogComponent } from '@app/features/posts/
     AccountComponent,
     ProfileComponent,
     PostsListComponent,
+    PostDetailComponent,
     NewPostDialogComponent
   ],
   imports: [

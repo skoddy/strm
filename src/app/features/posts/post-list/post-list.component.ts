@@ -11,6 +11,7 @@ import { Location } from '@angular/common';
 import * as faker from 'faker';
 import { Author, Post } from '@app/data-model';
 
+
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
@@ -34,29 +35,26 @@ export class PostsListComponent implements OnInit {
     public auth: AuthService,
     public dialog: MatDialog,
     private db: DatabaseService,
-    private afs: AngularFirestore) {
-    this.posts.init('posts', 'createdAt');
+    private afs: AngularFirestore,
+    public router: Router) {
+
   }
   ngOnInit() {
+
+    this.posts.init('posts', 'createdAt');
     window.addEventListener('scroll', this.posts.scroll, true); // third parameter
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     window.removeEventListener('scroll', this.posts.scroll, true);
-    // reset data
-    this.unsubscribe = this.posts.data.subscribe();
-    this.posts._data = new BehaviorSubject([]);
-    this.unsubscribe.unsubscribe();
+
     console.log('destroyed');
   }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(NewPostDialogComponent, {
-      backdropClass: 'myBackdrop',
-      maxWidth: 'none',
-      width: '100vw',
-      height: '100vh',
+      maxWidth: '400px',
       data: { name: this.name, animal: this.animal }
     });
 
@@ -64,14 +62,12 @@ export class PostsListComponent implements OnInit {
       console.log('The dialog was closed');
       this.animal = result;
       if (result) {
-        console.log('with result' + result.category);
-        console.log('with result' + result.content);
-        this.newPost(result.category, result.content);
+        this.newPost(result.content);
       }
     });
   }
 
-  newPost(category: string, content: string) {
+  newPost(content: string) {
     const newPostId = this.db.getNewKey('posts');
     const date = new Date();
     const authorData: Author = {
@@ -82,18 +78,23 @@ export class PostsListComponent implements OnInit {
 
     const postData: Post = {
       createdAt: new Date(),
-      category: category,
       content: this.strip_html_tags(content),
       author: authorData
     };
 
-    this.add(postData, newPostId).then(() =>
-      console.log('data saved')
-    );
+    this.add(postData, newPostId).then(() => {
+
+      console.log('data saved');
+      this.router.navigate([`user/${this.auth.uid}`]);
+    });
   }
 
   add(data, id) {
-    return this.afs.collection('posts').doc(id).set(data);
+    const set = [];
+
+    set[`users/${this.auth.uid}/posts/${id}`] = data;
+    set[`posts/${id}`] = data;
+    return this.db.batch(set, 'set');
   }
 
   strip_html_tags(str) {
@@ -115,7 +116,6 @@ export class PostsListComponent implements OnInit {
 
     const postData: Post = {
       createdAt: date,
-      category: this.getRandomItem(this.categories),
       content: faker.lorem.sentences(25),
       author: authorData
     };

@@ -26,7 +26,7 @@ export class PostsService {
   private _done = new BehaviorSubject(false);
   private _loading = new BehaviorSubject(false);
   // public for reset in component
-  public _data = new BehaviorSubject([]);
+  private _data = new BehaviorSubject([]);
   // Observable data
   public data: Observable<any>;
   public done: Observable<boolean> = this._done.asObservable();
