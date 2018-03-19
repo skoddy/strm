@@ -26,7 +26,7 @@ export class PostsService {
   private _done = new BehaviorSubject(false);
   private _loading = new BehaviorSubject(false);
   // public for reset in component
-  private _data = new BehaviorSubject([]);
+  public _data: BehaviorSubject<any| null>;
   // Observable data
   public data: Observable<any>;
   public done: Observable<boolean> = this._done.asObservable();
@@ -42,7 +42,9 @@ export class PostsService {
       this.more();
     }
   }
+destroy() {
 
+}
   init(path: string, field: string, opts?: any) {
     this.query = {
       path,
@@ -59,6 +61,7 @@ export class PostsService {
         .orderBy(this.query.field, 'desc')
         .limit(this.query.limitFirst);
     });
+    this._data = new BehaviorSubject([]);
     this.mapAndUpdate(first);
 
     // Create the observable array for consumption in components
@@ -91,7 +94,7 @@ export class PostsService {
 
   // Maps the snapshot to usable format the updates source
   private mapAndUpdate(col?: AngularFirestoreCollection<any>) {
-    // if (this._done.value || this._loading.value) { return; }
+    if (this._done.value || this._loading.value) { return; }
     // loading
     this._loading.next(true);
     // Map snapshot with doc ref (needed for cursor)

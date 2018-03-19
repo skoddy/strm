@@ -37,11 +37,11 @@ export class PostsListComponent implements OnInit {
     private db: DatabaseService,
     private afs: AngularFirestore,
     public router: Router) {
-
+    // reset data
+    this.posts.init('posts', 'createdAt');
   }
   ngOnInit() {
 
-    this.posts.init('posts', 'createdAt');
     window.addEventListener('scroll', this.posts.scroll, true); // third parameter
   }
 
@@ -83,7 +83,6 @@ export class PostsListComponent implements OnInit {
     };
 
     this.add(postData, newPostId).then(() => {
-
       console.log('data saved');
       this.router.navigate([`user/${this.auth.uid}`]);
     });
@@ -91,7 +90,6 @@ export class PostsListComponent implements OnInit {
 
   add(data, id) {
     const set = [];
-
     set[`users/${this.auth.uid}/posts/${id}`] = data;
     set[`posts/${id}`] = data;
     return this.db.batch(set, 'set');
