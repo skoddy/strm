@@ -6,6 +6,8 @@ import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/fires
 import 'rxjs/add/operator/switchMap';
 import * as firebase from 'firebase/app';
 import { Post } from '../../data-model';
+import { Subscription } from 'rxjs/Subscription';
+import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
 export interface QueryConfig {
   path: string;
@@ -18,15 +20,17 @@ export interface QueryConfig {
 }
 
 @Injectable()
-export class PostsService {
+export class PostsService implements OnDestroy {
+  snapshot: Subscription;
   content: string;
   category: string;
   query: QueryConfig;
+  subscriptions: Subscription[] = [];
   // Source data
   private _done = new BehaviorSubject(false);
   private _loading = new BehaviorSubject(false);
   // public for reset in component
-  public _data: BehaviorSubject<any| null>;
+  public _data = new BehaviorSubject([]);
   // Observable data
   public data: Observable<any>;
   public done: Observable<boolean> = this._done.asObservable();
@@ -42,9 +46,9 @@ export class PostsService {
       this.more();
     }
   }
-destroy() {
-
-}
+  ngOnDestroy() {
+    console.log('Service destroy');
+  }
   init(path: string, field: string, opts?: any) {
     this.query = {
       path,
@@ -61,7 +65,7 @@ destroy() {
         .orderBy(this.query.field, 'desc')
         .limit(this.query.limitFirst);
     });
-    this._data = new BehaviorSubject([]);
+
     this.mapAndUpdate(first);
 
     // Create the observable array for consumption in components
@@ -69,15 +73,16 @@ destroy() {
       .scan((acc, val) => {
         return acc.concat(val);
       });
+    console.log('service data first: ', this.data);
 
   }
   // Retrieves additional data from firestore
   more() {
     const cursor = this.getCursor();
-    const more = this.afs.collection(this.query.path, ref => {
+    const more = this.afs.collection('posts', ref => {
       return ref
-        .orderBy(this.query.field, 'desc')
-        .limit(this.query.limitMore)
+        .orderBy('createdAt', 'desc')
+        .limit(4)
         .startAfter(cursor);
     });
     this.mapAndUpdate(more);
@@ -98,7 +103,7 @@ destroy() {
     // loading
     this._loading.next(true);
     // Map snapshot with doc ref (needed for cursor)
-    return col.snapshotChanges().pipe(
+    this.snapshot = col.snapshotChanges().pipe(
       tap(arr => {
         const values = arr.map(snap => {
           const data = snap.payload.doc.data();
@@ -126,7 +131,11 @@ destroy() {
       err => console.error('Observer got an error: ' + err),
       () => console.log('Observer got a complete notification')
       );
+    this.subscriptions.push(this.snapshot);
+    return this.snapshot;
   }
-
+  dispose() {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
 }
 

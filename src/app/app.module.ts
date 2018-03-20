@@ -20,7 +20,7 @@ import { NotificationPortalComponent } from './toolbar/notification-portal/notif
 import { AccountComponent } from './features/account/account.component';
 import { ProfileComponent } from './features/user/profile/profile.component';
 import { PostsListComponent, NewPostDialogComponent } from '@app/features/posts/post-list/post-list.component';
-import { PostDetailComponent } from '@app/features/posts/post-detail/post-detail.component';
+import { PostsModule } from '@app/features/posts/posts.module';
 
 @NgModule({
   declarations: [
@@ -31,8 +31,6 @@ import { PostDetailComponent } from '@app/features/posts/post-detail/post-detail
     NotificationPortalComponent,
     AccountComponent,
     ProfileComponent,
-    PostsListComponent,
-    PostDetailComponent,
     NewPostDialogComponent
   ],
   imports: [
@@ -43,6 +41,7 @@ import { PostDetailComponent } from '@app/features/posts/post-detail/post-detail
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    PostsModule,
     AngularFireModule.initializeApp(firebaseConfig),
   ],
   providers: [],

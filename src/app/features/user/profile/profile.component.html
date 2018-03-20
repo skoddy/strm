@@ -1,8 +1,9 @@
 <mat-toolbar>
   <span *ngIf="user$  | async as user">{{user.displayName}}</span>
+  <button mat-button color="primary" (click)="nextOne()">ghfgh</button>
 </mat-toolbar>
-<div *ngIf="posts.data | async; let posts;">
+<div *ngIf="data | async; let posts;">
   <div *ngFor="let post of posts">
-    <app-post-detail [post]="post"></app-post-detail>
+hj
   </div>
 </div>

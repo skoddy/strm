@@ -3,19 +3,21 @@ import { interval } from 'rxjs/observable/interval';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Subscription } from 'rxjs/Subscription';
-import { AuthService, DatabaseService, PostsService } from '@app/core';
+import { AuthService, DatabaseService } from '@app/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as faker from 'faker';
 import { Author, Post } from '@app/data-model';
+import { PostsService } from '@app/features/posts/posts.service';
 
 
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss'],
+  providers: [PostsService]
 })
 
 export class PostsListComponent implements OnInit {
@@ -38,17 +40,16 @@ export class PostsListComponent implements OnInit {
     private afs: AngularFirestore,
     public router: Router) {
     // reset data
-    this.posts.init('posts', 'createdAt');
   }
   ngOnInit() {
-
-    window.addEventListener('scroll', this.posts.scroll, true); // third parameter
+    this.posts.init(`posts`, 'createdAt');
+     window.addEventListener('scroll', this.posts.scroll, true); // third parameter
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
-    window.removeEventListener('scroll', this.posts.scroll, true);
-
+    this.posts.dispose();
+     window.removeEventListener('scroll', this.posts.scroll, true);
     console.log('destroyed');
   }
 
@@ -84,7 +85,6 @@ export class PostsListComponent implements OnInit {
 
     this.add(postData, newPostId).then(() => {
       console.log('data saved');
-      this.router.navigate([`user/${this.auth.uid}`]);
     });
   }
 
