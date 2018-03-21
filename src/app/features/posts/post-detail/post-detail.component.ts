@@ -1,8 +1,5 @@
-import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Post } from '../../../data-model';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { Post } from '@app/data-model';
 
 
 @Component({
@@ -12,19 +9,14 @@ import { AngularFirestore } from 'angularfire2/firestore';
 })
 
 export class PostDetailComponent implements OnInit {
-  postDoc: any;
-  @Input() post: string;
-  post$: Observable<Post>;
 
-  constructor(public route: ActivatedRoute, private afs: AngularFirestore) { }
+  @Input() post: Post;
+
+
+  constructor() { }
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.post$ = this.getPost(id);
-  }
-  getPost(id: string) {
-    this.postDoc = this.afs.doc<Post>(`posts/${id}`);
-    return this.postDoc.valueChanges();
+
   }
 
 }
