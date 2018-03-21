@@ -64,16 +64,15 @@ export class PostsListComponent implements OnInit {
     // reset data
   }
   ngOnInit() {
-    this.posts$ = this.posts.data;
     this.posts.init();
-    this.postsAdded$ = this.posts.dataAdded;
+    this.posts$ = this.posts.data;
     this.posts.addedPosts();
+    this.postsAdded$ = this.posts.dataAdded;
     window.addEventListener('scroll', this.posts.scroll, true); // third parameter
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
-
     window.removeEventListener('scroll', this.posts.scroll, true);
     console.log('destroyed');
   }

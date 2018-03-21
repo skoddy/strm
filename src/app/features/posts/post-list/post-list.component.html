@@ -1,13 +1,11 @@
 <div *ngIf="posts.loading | async">
   <mat-progress-bar class="loader" mode="indeterminate"></mat-progress-bar>
 </div>
-<button mat-fab (click)="posts.more()">
-  <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
-</button>
+
 <div class="wrapper">
   <div>
       <div *ngIf="postsAdded$ | async; let posts;">
-    <div *ngFor="let post of posts"  [@flyInOut]="'in'">
+    <div *ngFor="let post of posts"  [@flyInOut]="'in'">new
       <app-post-detail [post]="post" ></app-post-detail>
     </div>
   </div>
