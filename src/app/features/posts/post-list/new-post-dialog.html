@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Delete all</h2>
 <mat-dialog-content>
   <mat-form-field class="stream-list-create-textfield">
-    <textarea #msg [(ngModel)]="data.content" matInput placeholder="Was gibt's neues?" matTextareaAutosize matAutosizeMinRows="10"
+    <textarea #msg [(ngModel)]="content" matInput placeholder="Was gibt's neues?" matTextareaAutosize matAutosizeMinRows="10"
       matAutosizeMaxRows="30"></textarea>
     <mat-hint align="end">{{msg.value.length}} / 500</mat-hint>
   </mat-form-field>
@@ -9,7 +9,7 @@
 <mat-dialog-actions>
   <button mat-button (click)="fillForm()">autofill</button>
   <button mat-button mat-dialog-close>Abbrechen</button>
-  <button color="primary" [disabled]="data.content?.length < 2 || data.content?.length > 500" mat-raised-button
-    (click)="dialogRef.close(data)">STREAM!</button>
+  <button color="primary" [disabled]="content?.length < 2 || content?.length > 500" mat-raised-button
+    (click)="dialogRef.close(content)">STREAM!</button>
 
 </mat-dialog-actions>

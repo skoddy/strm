@@ -3,19 +3,21 @@
 </div>
 
 <div class="wrapper">
-  <div>
-      <div *ngIf="postsAdded$ | async; let posts;">
-    <div *ngFor="let post of posts"  [@flyInOut]="'in'">new
-      <app-post-detail [post]="post" ></app-post-detail>
-    </div>
-  </div>
-  </div>
 
-  <div *ngIf="posts$ | async; let posts;">
-    <div *ngFor="let post of posts" >
+
+  <div *ngIf="postsAdded$ | async; let posts;">
+    <div *ngFor="let post of posts" [@flyInOut]="'in'">new
       <app-post-detail [post]="post"></app-post-detail>
     </div>
   </div>
+
+
+  <div *ngIf="posts$ | async; let posts;">
+    <div *ngFor="let post of posts">
+      <app-post-detail [post]="post"></app-post-detail>
+    </div>
+  </div>
+
   <div class="button-wrapper">
     <div *ngIf="auth.user$ | async">
       <button id="add" mat-fab (click)="openDialog()">
@@ -23,5 +25,6 @@
       </button>
     </div>
   </div>
+  
 </div>
 <p *ngIf="posts.done | async"> Ende </p>

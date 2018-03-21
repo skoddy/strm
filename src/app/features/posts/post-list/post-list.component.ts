@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, OnDestroy } from '@angular/core';
 import { interval } from 'rxjs/observable/interval';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -20,12 +20,12 @@ import { trigger, style, transition, animate, keyframes, query, stagger, state }
   styleUrls: ['./post-list.component.scss'],
   animations: [
     trigger('flyInOut', [
-      state('in', style({ transform: 'translateY(0)' })),
+      state('in', style({transform: 'translateX(0)'})),
       transition('void => *', [
-        animate('.6s ease-in', keyframes([
-          style({ opacity: 0, offset: 0 }),
-
-          style({ opacity: 1, offset: 1.0 })
+        animate(300, keyframes([
+          style({opacity: 0, transform: 'translateY(50%)', offset: 0}),
+          style({opacity: 1, transform: 'translateY(15px)',  offset: 0.3}),
+          style({opacity: 1, transform: 'translateY(0)',     offset: 1.0})
         ]))
       ]),
       transition('* => void', [
@@ -40,29 +40,18 @@ import { trigger, style, transition, animate, keyframes, query, stagger, state }
   providers: [PostsService]
 })
 
-export class PostsListComponent implements OnInit {
+export class PostsListComponent implements OnInit, OnDestroy {
   posts$: Observable<Post[]>;
   postsAdded$: Observable<Post[]>;
 
-  unsubscribe: Subscription;
-  mouseOverTimer: any;
-  animal: string;
-  name: string;
-  categories = [
-    'Programmierung',
-    'Netzwerke',
-    'Prüfung',
-    'Sonstiges'
-  ];
   constructor(
     public posts: PostsService,
     public auth: AuthService,
     public dialog: MatDialog,
     private db: DatabaseService,
     private afs: AngularFirestore,
-    public router: Router) {
-    // reset data
-  }
+    public router: Router) {}
+
   ngOnInit() {
     this.posts.init();
     this.posts$ = this.posts.data;
@@ -71,23 +60,19 @@ export class PostsListComponent implements OnInit {
     window.addEventListener('scroll', this.posts.scroll, true); // third parameter
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
     window.removeEventListener('scroll', this.posts.scroll, true);
-    console.log('destroyed');
   }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(NewPostDialogComponent, {
-      maxWidth: '400px',
-      data: { name: this.name, animal: this.animal }
+      maxWidth: '400px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.animal = result;
+      console.log('The dialog was closed', result);
       if (result) {
-        this.newPost(result.content);
+        this.newPost(result);
       }
     });
   }
@@ -103,7 +88,7 @@ export class PostsListComponent implements OnInit {
 
     const postData: Post = {
       createdAt: new Date(),
-      content: this.strip_html_tags(content),
+      content: this.stripHtmlTags(content),
       author: authorData
     };
 
@@ -112,14 +97,7 @@ export class PostsListComponent implements OnInit {
     });
   }
 
-  add(data, id) {
-    const set = [];
-    set[`users/${this.auth.uid}/posts/${id}`] = data;
-    set[`posts/${id}`] = data;
-    return this.db.batch(set, 'set');
-  }
-
-  strip_html_tags(str) {
+  stripHtmlTags(str) {
     if ((str === null) || (str === '')) {
       return false;
     } else {
@@ -127,6 +105,7 @@ export class PostsListComponent implements OnInit {
     }
     return str.replace(/<[^>]*>/g, '');
   }
+
   addRandom() {
     const newPostId = this.db.getNewKey('posts');
     const date = new Date();
@@ -142,31 +121,16 @@ export class PostsListComponent implements OnInit {
       author: authorData
     };
 
-    this.add(postData, newPostId).then(() =>
+    this.posts.create(postData, newPostId).then(() =>
       console.log('data saved')
     );
   }
-
 
   getRandomItem(arr) {
     console.log(arr);
     return arr[Math.floor(Math.random() * arr.length)];
   }
 
-
-  onHovering(e) {
-    const source = interval(500).take(1);
-    this.mouseOverTimer = source.subscribe(val => {
-      e.target.classList.remove('mat-elevation-z2');
-      e.target.className = e.target.className.concat(' mat-elevation-z8 ');
-    });
-  }
-
-  onUnovering(e) {
-    this.mouseOverTimer.unsubscribe();
-    e.target.classList.remove('mat-elevation-z8');
-    e.target.className = e.target.className.concat(' mat-elevation-z2 ');
-  }
 }
 
 @Component({
@@ -177,7 +141,6 @@ export class PostsListComponent implements OnInit {
 
 export class NewPostDialogComponent {
   content: string;
-  category: string;
 
   constructor(
     private auth: AuthService,
@@ -189,12 +152,9 @@ export class NewPostDialogComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
   fillForm() {
-    this.data.category = 'Netzwerke';
-    this.data.content = faker.lorem.sentences(10);
-  }
-  back() {
-    this.location.back();
+    this.content = faker.lorem.sentences(10);
   }
 
 }
