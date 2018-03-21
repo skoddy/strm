@@ -51,8 +51,8 @@ export class DatabaseService {
         }
       }
     }
-
     return batch.commit();
+
   }
   // this.db.upsert('notes/xyz', { content: 'hello world'})
   upsert<T>(ref: DocPredicate<T>, data: any) {
