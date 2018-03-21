@@ -120,12 +120,13 @@ export class DatabaseService {
       return actions.map(a => {
         const data = a.payload.doc.data();
         const id = a.payload.doc.id;
-        return { id, ...data };
+        const doc = a.payload.doc;
+        return { id, ...data, doc };
       });
     });
   }
   colWithIdsAdded$<T>(ref: CollectionPredicate<T>, queryFn?): Observable<any[]> {
-    return this.col(ref, queryFn).snapshotChanges(['added']).map(actions => {
+    return this.col(ref, queryFn).stateChanges(['added']).map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data();
         const id = a.payload.doc.id;

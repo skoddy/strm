@@ -8,36 +8,97 @@ import * as firebase from 'firebase/app';
 import { Post } from '../../data-model';
 import { Subscription } from 'rxjs/Subscription';
 import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
+import { DatabaseService, AuthService } from '@app/core';
 
-export interface QueryConfig {
-  path: string;
-  field: string;
-  limitFirst: number;
-  limitMore: number;
-  reverse: boolean;
-  prepend: boolean;
-  direction: string;
-}
+
 
 @Injectable()
-export class PostsService implements OnDestroy {
-  snapshot: Subscription;
-  content: string;
-  category: string;
-  query: QueryConfig;
-  subscriptions: Subscription[] = [];
-  // Source data
-  private _done = new BehaviorSubject(false);
-  private _loading = new BehaviorSubject(false);
-  // public for reset in component
-  public _data = new BehaviorSubject([]);
-  // Observable data
-  public data: Observable<any>;
-  public done: Observable<boolean> = this._done.asObservable();
-  public loading: Observable<boolean> = this._loading.asObservable();
+export class PostsService {
+  anmiation = 0;
+  latestEntry: any;
+  data: Observable<Post[]>;
+  private _data: BehaviorSubject<Post[]>;
+  dataAdded: Observable<Post[]>;
+  private _dataAdded: BehaviorSubject<Post[]>;
+  private dataStore: {
+    posts: Post[]
+  };
+  private dataStoreAdded: {
+    posts: Post[]
+  };
+  constructor(private db: DatabaseService, public auth: AuthService) {
+    this.dataStore = { posts: [] };
+    this.dataStoreAdded = { posts: [] };
+    this._data = <BehaviorSubject<Post[]>>new BehaviorSubject([]);
+    this.data = this._data.asObservable().scan((acc, val) => {
+      console.log('acc: ', acc);
+      console.log('val: ', val);
+      console.log('concat: ', acc.concat(val));
+      return acc.concat(val).sort((a, b) => {
+        if (a.createdAt > b.createdAt) { return -1; }
+        if (a.createdAt < b.createdAt) { return 1; }
+        return 0;
+      });
+    });
+    this._dataAdded = <BehaviorSubject<Post[]>>new BehaviorSubject([]);
+    this.dataAdded = this._dataAdded.asObservable().scan((acc, val) => {
+      console.log('acc: ', acc);
+      console.log('val: ', val);
+      console.log('concat: ', acc.concat(val));
+      return acc.concat(val).sort((a, b) => {
+        if (a.createdAt > b.createdAt) { return -1; }
+        if (a.createdAt < b.createdAt) { return 1; }
+        return 0;
+      });
+    });
+  }
 
-  constructor(private afs: AngularFirestore) { }
+  init() {
+    const postsRef = this.db.colWithIds$('posts', ref => ref
+      .orderBy('createdAt', 'desc')
+      .limit(2))
+      .subscribe(data => {
+        this.dataStore.posts = data;
+        this.latestEntry = data[data.length - 1].createdAt;
+        this._data.next(Object.assign({}, this.dataStore).posts);
+        postsRef.unsubscribe();
+      }, error => console.log('error loading posts'));
+      console.log('datastore: ', this.dataStore.posts);
 
+  }
+addedPosts() {
+  const now = new Date();
+  const postsRef = this.db.colWithIdsAdded$('posts', ref => ref
+  .orderBy('createdAt', 'desc')
+  .where('createdAt', '>', now))
+  .subscribe(data => {
+    this.dataStoreAdded.posts = data;
+    this._dataAdded.next(Object.assign({}, this.dataStoreAdded).posts);
+    this.anmiation = data.length;
+  }, error => console.log('error loading posts'));
+  console.log('datastore: ', this.dataStoreAdded.posts);
+}
+  more() {
+    const postsRef = this.db.colWithIds$('posts', ref => ref
+      .orderBy('createdAt', 'desc')
+      .startAfter(this.latestEntry)
+      .limit(2))
+      .subscribe(data => {
+        this.dataStore.posts = data;
+        this.latestEntry = data[data.length - 1].createdAt;
+        this._data.next(Object.assign({}, this.dataStore).posts);
+        postsRef.unsubscribe();
+      }, error => console.log('error loading posts'));
+      console.log('datastore: ', this.dataStore.posts);
+  }
+  create(data: Post, id: string) {
+
+      const set = [];
+      set[`users/${this.auth.uid}/posts/${id}`] = data;
+      set[`posts/${id}`] = data;
+      return this.db.batch(set, 'set');
+
+  }
   scroll = (e): void => {
     const top = e.target.scrollTop;
     const height = e.target.scrollHeight;
@@ -46,96 +107,6 @@ export class PostsService implements OnDestroy {
       this.more();
     }
   }
-  ngOnDestroy() {
-    console.log('Service destroy');
-  }
-  init(path: string, field: string, opts?: any) {
-    this.query = {
-      path,
-      field,
-      limitFirst: 9,
-      limitMore: 9,
-      reverse: true,
-      prepend: false,
-      ...opts
-    };
 
-    const first = this.afs.collection<Post>(this.query.path, ref => {
-      return ref
-        .orderBy(this.query.field, 'desc')
-        .limit(this.query.limitFirst);
-    });
-
-    this.mapAndUpdate(first);
-
-    // Create the observable array for consumption in components
-    this.data = this._data.asObservable()
-      .scan((acc, val) => {
-        return acc.concat(val);
-      });
-    console.log('service data first: ', this.data);
-
-  }
-  // Retrieves additional data from firestore
-  more() {
-    const cursor = this.getCursor();
-    const more = this.afs.collection('posts', ref => {
-      return ref
-        .orderBy('createdAt', 'desc')
-        .limit(4)
-        .startAfter(cursor);
-    });
-    this.mapAndUpdate(more);
-  }
-
-  // Determines the doc snapshot to paginate query
-  private getCursor() {
-    const current = this._data.value;
-    if (current.length) {
-      return current[current.length - 1].doc;
-    }
-    return null;
-  }
-
-  // Maps the snapshot to usable format the updates source
-  private mapAndUpdate(col?: AngularFirestoreCollection<any>) {
-    if (this._done.value || this._loading.value) { return; }
-    // loading
-    this._loading.next(true);
-    // Map snapshot with doc ref (needed for cursor)
-    this.snapshot = col.snapshotChanges().pipe(
-      tap(arr => {
-        const values = arr.map(snap => {
-          const data = snap.payload.doc.data();
-          const doc = snap.payload.doc;
-          const id = snap.payload.doc.id;
-          return { id, ...data, doc };
-        });
-
-        // update source with new values, done loading
-        console.log(values);
-        if (values.length) {
-          this._data.next(values);
-        }
-        this._loading.next(false);
-        // no more values, mark done
-        if (!values.length) {
-          this._done.next(true);
-        }
-        this._loading.next(false);
-      }),
-    ).take(1).subscribe(
-      x => {
-        console.log('Observer got a next value: ' + x.length);
-      },
-      err => console.error('Observer got an error: ' + err),
-      () => console.log('Observer got a complete notification')
-      );
-    this.subscriptions.push(this.snapshot);
-    return this.snapshot;
-  }
-  dispose() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
-  }
 }
 

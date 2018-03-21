@@ -11,16 +11,38 @@ import { Location } from '@angular/common';
 import * as faker from 'faker';
 import { Author, Post } from '@app/data-model';
 import { PostsService } from '@app/features/posts/posts.service';
-
+import { Observable } from 'rxjs/Observable';
+import { trigger, style, transition, animate, keyframes, query, stagger, state } from '@angular/animations';
 
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss'],
+  animations: [
+    trigger('flyInOut', [
+      state('in', style({ transform: 'translateY(0)' })),
+      transition('void => *', [
+        animate('.6s ease-in', keyframes([
+          style({ opacity: 0, offset: 0 }),
+
+          style({ opacity: 1, offset: 1.0 })
+        ]))
+      ]),
+      transition('* => void', [
+        animate(300, keyframes([
+          style({ opacity: 1, transform: 'translateX(0)', offset: 0 }),
+          style({ opacity: 1, transform: 'translateX(-15px)', offset: 0.7 }),
+          style({ opacity: 0, transform: 'translateX(100%)', offset: 1.0 })
+        ]))
+      ])
+    ])
+  ],
   providers: [PostsService]
 })
 
 export class PostsListComponent implements OnInit {
+  posts$: Observable<Post[]>;
+  postsAdded$: Observable<Post[]>;
 
   unsubscribe: Subscription;
   mouseOverTimer: any;
@@ -42,14 +64,17 @@ export class PostsListComponent implements OnInit {
     // reset data
   }
   ngOnInit() {
-    this.posts.init(`posts`, 'createdAt');
-     window.addEventListener('scroll', this.posts.scroll, true); // third parameter
+    this.posts$ = this.posts.data;
+    this.posts.init();
+    this.postsAdded$ = this.posts.dataAdded;
+    this.posts.addedPosts();
+    window.addEventListener('scroll', this.posts.scroll, true); // third parameter
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
-    this.posts.dispose();
-     window.removeEventListener('scroll', this.posts.scroll, true);
+
+    window.removeEventListener('scroll', this.posts.scroll, true);
     console.log('destroyed');
   }
 
@@ -83,7 +108,7 @@ export class PostsListComponent implements OnInit {
       author: authorData
     };
 
-    this.add(postData, newPostId).then(() => {
+    this.posts.create(postData, newPostId).then(() => {
       console.log('data saved');
     });
   }
@@ -128,9 +153,7 @@ export class PostsListComponent implements OnInit {
     console.log(arr);
     return arr[Math.floor(Math.random() * arr.length)];
   }
-  more() {
-    this.posts.more();
-  }
+
 
   onHovering(e) {
     const source = interval(500).take(1);
