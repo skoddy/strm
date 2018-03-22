@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { AuthService, LocalStorageService, DatabaseService } from '@app/core';
+import { AuthService, DatabaseService } from '@app/core';
 import { User } from '@app/data-model';
 import { CdkPortal, Portal } from '@angular/cdk/portal';
 import { OverlayRef, OverlayContainer } from '@angular/cdk/overlay';

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChildren, QueryList, HostBinding, ChangeDetectorRef } from '@angular/core';
-import { routerTransition, AuthService, LocalStorageService, DatabaseService } from '@app/core';
+import { routerTransition, AuthService, DatabaseService } from '@app/core';
 import { ComponentPortal, Portal, CdkPortal } from '@angular/cdk/portal';
 import { SettingsPortalComponent } from '@app/toolbar/settings-portal/settings-portal.component';
 import { User } from '@app/data-model';
