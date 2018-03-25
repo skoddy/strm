@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { AuthService, LocalStorageService, DatabaseService } from '@app/core';
+import { AuthService, DatabaseService } from '@app/core';
 import { User } from '@app/data-model';
 import { CdkPortal, Portal } from '@angular/cdk/portal';
 import { OverlayRef, OverlayContainer } from '@angular/cdk/overlay';
@@ -18,6 +18,7 @@ export class SettingsPortalComponent implements OnInit {
   @HostBinding('class') componentCssClass;
   user: User;
   lastKeydown = '';
+  overlayRef: OverlayRef;
   messages = [
     { from: 'asdasdas', subject: 'asdsdg sfdsdf sd', content: 'asdasdasdasd' },
     { from: 'asdasdas', subject: 'asdsdg sfdsdf sd', content: 'asdasdasdasd' },
@@ -30,7 +31,6 @@ export class SettingsPortalComponent implements OnInit {
     { name: 'Dunkelmodus', icon: 'brightness_6' },
     { name: 'Abmelden', icon: 'exit_to_app' },
   ];
-  overlayRef: OverlayRef;
   constructor(public auth: AuthService,
     public overlayContainer: OverlayContainer,
     public db: DatabaseService) {

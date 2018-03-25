@@ -12,16 +12,16 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'posts',
-    component: PostsListComponent
+    path: '',
+    loadChildren: './features/posts/posts.module#PostsModule'
   },
   {
     path: 'account',
     component: AccountComponent
   },
   {
-    path: 'user/:id',
-    component: ProfileComponent
+    path: '',
+    loadChildren: './features/user/user.module#UserModule'
   },
   { path: '**', component: NotFoundComponent }
 ];

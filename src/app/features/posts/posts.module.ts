@@ -1,18 +1,27 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PostsListComponent } from '@app/features/posts/post-list/post-list.component';
+import { RouterModule, Routes } from '@angular/router';
 
 import { SharedModule } from '@app/shared';
+
+import { PostsListComponent, NewPostDialogComponent } from '@app/features/posts/post-list/post-list.component';
 import { PostDetailComponent } from '@app/features/posts/post-detail/post-detail.component';
-import { AppRoutingModule } from '@app/app-routing.module';
+
+
+const routes: Routes = [
+  {
+    path: 'posts',
+    component: PostsListComponent,
+    data: { title: 'Posts' }
+  }
+];
 
 @NgModule({
   imports: [
-    CommonModule,
     SharedModule,
-    AppRoutingModule
+    RouterModule.forChild(routes)
   ],
-  declarations: [PostsListComponent, PostDetailComponent],
-  providers: []
+  declarations: [PostsListComponent, PostDetailComponent, NewPostDialogComponent],
+  providers: [],
+  entryComponents: [NewPostDialogComponent]
 })
 export class PostsModule { }

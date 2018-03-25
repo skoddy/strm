@@ -1,0 +1,8 @@
+@import '~@angular/material/theming';
+@mixin strm-auth-portal-component-theme($theme) {
+  $accent: map-get($theme, accent);
+  $primary: map-get($theme, primary);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+}

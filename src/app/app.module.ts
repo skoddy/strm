@@ -1,8 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import localeDe from '@angular/common/locales/de';
 import { registerLocaleData } from '@angular/common';
@@ -18,9 +17,8 @@ import { SettingsPortalComponent } from './toolbar/settings-portal/settings-port
 import { AuthPortalComponent } from './toolbar/auth-portal/auth-portal.component';
 import { NotificationPortalComponent } from './toolbar/notification-portal/notification-portal.component';
 import { AccountComponent } from './features/account/account.component';
-import { ProfileComponent } from './features/user/profile/profile.component';
-import { PostsListComponent, NewPostDialogComponent } from '@app/features/posts/post-list/post-list.component';
-import { PostsModule } from '@app/features/posts/posts.module';
+import { MaterialModule } from './material.module';
+import { UserModule } from './features/user/user.module';
 
 @NgModule({
   declarations: [
@@ -30,22 +28,19 @@ import { PostsModule } from '@app/features/posts/posts.module';
     AuthPortalComponent,
     NotificationPortalComponent,
     AccountComponent,
-    ProfileComponent,
-    NewPostDialogComponent
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     CoreModule,
+    MaterialModule,
     SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AppRoutingModule,
-    PostsModule,
     AngularFireModule.initializeApp(firebaseConfig),
+    UserModule,
   ],
   providers: [],
-  entryComponents: [SettingsPortalComponent, NewPostDialogComponent],
+  entryComponents: [SettingsPortalComponent, AuthPortalComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChildren, QueryList, HostBinding, ChangeDetectorRef } from '@angular/core';
-import { routerTransition, AuthService, LocalStorageService, DatabaseService } from '@app/core';
+import { routerTransition, AuthService, DatabaseService } from '@app/core';
 import { ComponentPortal, Portal, CdkPortal } from '@angular/cdk/portal';
 import { SettingsPortalComponent } from '@app/toolbar/settings-portal/settings-portal.component';
 import { User } from '@app/data-model';
@@ -7,6 +7,7 @@ import { OverlayConfig, Overlay, OverlayContainer } from '@angular/cdk/overlay';
 import { tap, filter } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { AuthPortalComponent } from '@app/toolbar/auth-portal/auth-portal.component';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 
 export class AppComponent implements OnInit {
 
+  guest: string;
   theme: string;
   darkmode = false;
   settings$: Observable<{}>;
@@ -40,7 +42,7 @@ export class AppComponent implements OnInit {
     public db: DatabaseService,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher) {
-      // media matcher
+    // media matcher
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => {
       if (!changeDetectorRef['destroyed']) {
@@ -48,14 +50,13 @@ export class AppComponent implements OnInit {
       }
     };
     this.mobileQuery.addListener(this._mobileQueryListener);
-        this.auth.user$.subscribe(user => {
+    this.auth.user$.subscribe(user => {
       if (user) {
         this.user = user;
-        console.log(this.user.uid);
-        console.log(this.user.darkmode);
-       return this.setTheme(this.user.darkmode);
+        return this.setTheme(this.user.darkmode);
       } else {
-       return this.setTheme(false);
+        this.guest = 'guest';
+        return this.setTheme(false);
       }
     });
 
@@ -83,6 +84,28 @@ export class AppComponent implements OnInit {
       this.portal.detach();
       this.isOpen = false;
     }
+  }
+
+  openAuth() {
+    const config = new OverlayConfig({
+      hasBackdrop: true,
+      maxWidth: '400px',
+      positionStrategy: this.overlay.position().global().centerHorizontally().centerVertically(),
+    });
+    const overlayRef = this.overlay.create(config);
+
+    const componentRef = overlayRef
+      .attach(new ComponentPortal(AuthPortalComponent, this.viewContainerRef));
+
+    componentRef.instance.overlayRef = overlayRef;
+
+    overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+
+    overlayRef.keydownEvents()
+      .pipe(
+        tap(e => componentRef.instance.lastKeydown = e.key),
+        filter(e => e.key === 'Escape')
+      ).subscribe(() => overlayRef.detach());
   }
 
   openSettings() {

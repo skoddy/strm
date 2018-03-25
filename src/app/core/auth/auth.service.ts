@@ -12,9 +12,10 @@ import { User } from '@app/data-model';
 @Injectable()
 export class AuthService {
 
-  userId: string; // current user uid
-  public user$: Observable<User | null>;
-  private userDetails: User = null;
+  user$: Observable<User | null>;
+
+  authState: any = null;
+
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
@@ -27,44 +28,32 @@ export class AuthService {
           return Observable.of(null);
         }
       });
-    // Now we subscribe to the User Observable and save some details
-    this.user$.subscribe(
-      (user) => {
-        if (user) {
-          this.userId = user.uid;
-          this.userDetails = user;
-          console.log(this.userDetails);
-        } else {
-          this.userDetails = null;
-        }
-      }
-    );
+    this.afAuth.authState.subscribe(data => this.authState = data);
   }
+
   get authenticated(): boolean {
-    // consider changing to 'return this.userDetails != null'
-    if (this.userDetails == null) {
-      return false;
-    } else {
-      return true;
-    }
+    return this.authState !== null;
   }
-  // Returns current user UID
+
   get uid(): string {
-    return this.authenticated ? this.userDetails.uid : '';
+    return this.authenticated ? this.authState.uid : null;
   }
+
   // Returns current user display name or Guest
   get displayName(): string {
-    return this.userDetails.displayName || this.userDetails.email;
-  }
-  // Returns current user photo
-  get photoURL(): string {
-    return this.userDetails.photoURL || '';
+    return this.authState.displayName || this.authState.email;
   }
 
   // Returns current user photo
-  get email(): string {
-    return this.userDetails.email || '';
+  get photoURL(): string {
+    return this.authState.photoURL || '';
   }
+
+  // Returns current user email
+  get email(): string {
+    return this.authState.email || '';
+  }
+
   googleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);
@@ -81,7 +70,25 @@ export class AuthService {
       this.router.navigate(['/']);
     });
   }
+  emailSignIn(email: string, password: string) {
+    return this.afAuth.auth
+      .signInWithEmailAndPassword(email, password)
+      .then(() => console.log('You have successfully signed in'))
+      .catch(error => console.log(error.message));
+  }
 
+  githubLogin() {
+    const provider = new firebase.auth.GithubAuthProvider();
+    return this.oAuthLogin(provider);
+  }
+  facebookLogin() {
+    const provider = new firebase.auth.FacebookAuthProvider();
+    return this.oAuthLogin(provider);
+  }
+  twitterLogin() {
+    const provider = new firebase.auth.TwitterAuthProvider();
+    return this.oAuthLogin(provider);
+  }
   // If error, console log and toast user
   private handleError(error: Error) {
     console.error(error);

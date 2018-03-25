@@ -1,3 +1,34 @@
-<p>
-  auth-portal works!
-</p>
+<main>
+  <section>
+    <mat-card class="mat-elevation-z8">
+      <form [formGroup]="signInForm" (ngSubmit)="signIn()">
+        <h3>Anmelden</h3>
+        <mat-card-content>
+          <mat-form-field [formGroup]="signInForm">
+            <input matInput placeholder="E-Mail" [formControl]="email" required>
+            <mat-error *ngIf="email.valid">Not a valid email</mat-error>
+          </mat-form-field>
+
+          <mat-form-field [formGroup]="signInForm">
+            <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" [formControl]="password" required>
+            <mat-icon matSuffix (click)="hide = !hide">{{ hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+            <mat-hint align="end">
+              <a routerLink="/reset-password">Forgot password?</a>
+            </mat-hint>
+            <mat-error *ngIf="password.valid">Not a valid password</mat-error>
+          </mat-form-field>
+
+          <button mat-raised-button type="submit" color="accent">Sign in</button>
+
+          <p>Tired of yet another password? Continue with:</p>
+          <button mat-raised-button color="primary" (click)="google()">Google</button>
+          <button mat-raised-button color="primary" (click)="twitter()">Twitter</button>
+          <button mat-raised-button color="primary" (click)="facebook()">Facebook</button>
+          <button mat-raised-button color="primary" (click)="github()">Github</button>
+
+        </mat-card-content>
+
+      </form>
+    </mat-card>
+  </section>
+</main>

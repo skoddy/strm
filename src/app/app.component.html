@@ -1,11 +1,11 @@
-<div>
+<div *ngIf="user || guest">
   <mat-toolbar color="primary" class="main-header">
     <button (click)="start.toggle()" mat-icon-button>
       <mat-icon aria-label="Menu Toggle">menu</mat-icon>
     </button>
     <span class="title">STREAM</span>
     <span class="spacer"></span>
-    <div  *ngIf="auth.user$ | async then loggedIn else loginbutton"></div>
+    <div  *ngIf="auth.authenticated then loggedIn else loginbutton"></div>
     <ng-template #loggedIn>
       <button mat-icon-button (click)="end.toggle()" matTooltip="Freunde" matTooltipShowDelay="600">
         <mat-icon aria-label="Right sidenav toggle">people</mat-icon>
@@ -18,7 +18,7 @@
       </a>
     </ng-template>
     <ng-template #loginbutton>
-      <button mat-button (click)="login()">
+      <button mat-button (click)="openAuth()">
         Anmelden
       </button>
     </ng-template>

@@ -13,7 +13,7 @@
 
 
   <div *ngIf="posts$ | async; let posts;">
-    <div *ngFor="let post of posts">
+    <div *ngFor="let post of posts" [@flyInOut]="'in'">
       <app-post-detail [post]="post"></app-post-detail>
     </div>
   </div>
