@@ -66,7 +66,7 @@ export class AppComponent implements OnInit {
 
   }
   setTheme(darkmode: boolean) {
-    this.theme = darkmode ? 'dark-theme' : 'light-theme';
+    this.theme = darkmode ? 'dark-theme' : 'default-theme';
     this.componentCssClass = this.theme;
     const classList = this.overlayContainer.getContainerElement().classList;
     const toRemove = Array.from(classList).filter((item: string) =>

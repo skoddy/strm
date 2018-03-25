@@ -2,10 +2,12 @@
   <mat-card-header>
       <div mat-card-avatar class="header-image" [ngStyle]="{'background-image': 'url(' + post.author.photoURL + ')'}"></div>
     <mat-card-title><a routerLink="/user/{{post.author.uid}}" class="user-link">{{post.author.displayName}}</a></mat-card-title>
-    <mat-card-subtitle>{{post.createdAt | date : 'd. LLLL yyyy, H:mm':'':'de'}}</mat-card-subtitle>
+    <mat-card-subtitle 
+    matTooltip="{{post.createdAt | date : 'd. LLLL yyyy, H:mm':'':'de'}}"
+    matTooltipShowDelay="600">{{post.createdAt | fromNow}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <p class="post-content mat-body-1">{{post.content | slice:0:150}}...</p>
+    <p class="post-content mat-body-1">{{post.content}}</p>
   </mat-card-content>
   <mat-card-actions align="end">
     <button mat-button>LIKE</button>
