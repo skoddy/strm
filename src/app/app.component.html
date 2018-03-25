@@ -24,11 +24,11 @@
     </ng-template>
   </mat-toolbar>
   <mat-sidenav-container id="content" class="main-container">
-    <mat-sidenav position="start" #start 
-    [mode]="mobileQuery.matches ? 'over' : 'side'" 
+    <mat-sidenav position="start" #start
+    [mode]="mobileQuery.matches ? 'over' : 'side'"
     [opened]="mobileQuery.matches ? 'false' : 'false'"
-    class="left-sidenav" 
-    fixedInViewport="true" 
+    class="left-sidenav"
+    fixedInViewport="true"
     [fixedTopGap]="mobileQuery.matches ? '0' : '56'"
       fixedBottomGap="0">
       <div *ngIf="mobileQuery.matches">
