@@ -1,45 +1,45 @@
 .user-link {
-    text-decoration: none;
-}
-.container 
-{
-
-    position:relative;
-
+  text-decoration: none;
 }
 
-
+.container {
+  position: relative;
+}
 
 .loader {
-    height: 3px;
-    position: fixed;
-    top: 0px;
-    z-index: 100;
-    left: 0;
+  height: 3px;
+  position: fixed;
+  top: 0px;
+  z-index: 100;
+  left: 0;
 }
-.wrapper {
-    position: relative;
-    margin: 0 auto;
-  }
-.button-wrapper {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 90px;
-  }
-  #add {
-    position: fixed;
-    bottom: 30px;
-  }
 
-  mat-dialog-content {
-    max-width: 400px;
-    min-width: 300px;
-    .mat-form-field {
-      width: 100%;
-    }
+.wrapper {
+  position: relative;
+  margin: 0 auto;
+}
+
+.button-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 90px;
+}
+
+#add {
+  position: fixed;
+  bottom: 30px;
+}
+
+mat-dialog-content {
+  max-width: 400px;
+  min-width: 300px;
+  .mat-form-field {
+    width: 100%;
   }
-  .title {
-    margin-left: 24px;
-  }
+}
+
+.title {
+  margin-left: 24px;
+}
