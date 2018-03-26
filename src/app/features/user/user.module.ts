@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { SharedModule } from '@app/shared';
 import { ProfileComponent } from '@app/features/user/profile/profile.component';
+import { UserService } from './user.service';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
     SharedModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ProfileComponent]
+  declarations: [ProfileComponent],
+  providers: [UserService]
 })
 export class UserModule { }
